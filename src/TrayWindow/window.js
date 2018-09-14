@@ -1,3 +1,16 @@
+function sendNotification(notificationType, message) {
+
+  let notif = new window.Notification( 'My First Notification', {
+    body: message
+  })
+
+  notif.onclick = function () {
+    window.ipcRenderer.send(notificationType);
+  }
+}
+
+
+
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   // Electron conveniently allows developers to send notifications with the HTML5 Notification API, using the currently running operating system’s native notification APIs to display it.
 
@@ -22,15 +35,10 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
       });
   };
 
-  // call the function
-  /*
-  execute('./bash/pull-rsync.sh', (output) => {
-      console.log(output);
-  });
-  */
 
  execute('sudo rsync -avuzP --update --delete ../dest-folder/ ../sync-folder ', (output) => {
   console.log(output);
+  sendNotification('show-about-window-event', output);
 });
 
  
