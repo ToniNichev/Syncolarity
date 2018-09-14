@@ -1,0 +1,24 @@
+const { BrowserWindow, Tray } = require('electron');
+const Positioner = require('electron-positioner');
+
+class TrayIcon {
+  constructor(trayWindow) {
+    let iconPath = './icons/icon-22.png';
+
+    this.trayIcon = new Tray(iconPath);
+    this.trayIcon.setToolTip('Syncolarity'); 
+
+    this.trayIcon.on('click', (e, bounds) => {
+      if ( trayWindow.isVisible() ) {
+        trayWindow.hide();
+      } else {
+        let positioner = new Positioner(trayWindow);
+        positioner.move('trayCenter', bounds)
+
+        trayWindow.show();
+      }
+    });    
+  }
+}
+
+module.exports = TrayIcon;
