@@ -9,6 +9,7 @@ function sendNotification(notificationType, message) {
     body: message
   });
 
+
   notif.onclick = function () {
     window.ipcRenderer.send(notificationType);
   }
@@ -22,10 +23,11 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
     body: 'Lorem Ipsum Dolor Sit Amet'
   })
   
-  console.log("!@!@");
-  myNotification.onclick = () => {
-    console.log('Notification clicked')
-  }
+  setTimeout(function() {
+    myNotification.onclick = () => {
+      console.log('Notification clicked')
+    }
+  }, 4000);
 
   /*
   let notif = new window.Notification( 'synchronous-message', {
