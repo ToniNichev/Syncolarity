@@ -1,8 +1,13 @@
+const Rsync = require('rsync');
+var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/dest-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
+
+let notif = null;
+
 function sendNotification(notificationType, message) {
 
-  let notif = new window.Notification( 'My First Notification', {
+  notif = new window.Notification( 'Syncolarity', {
     body: message
-  })
+  });
 
   notif.onclick = function () {
     window.ipcRenderer.send(notificationType);
@@ -12,34 +17,50 @@ function sendNotification(notificationType, message) {
 
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
-  // Electron conveniently allows developers to send notifications with the HTML5 Notification API, using the currently running operating system’s native notification APIs to display it.
 
-  let notif = new window.Notification( 'My First Notification', {
+  let myNotification = new Notification('Title', {
+    body: 'Lorem Ipsum Dolor Sit Amet'
+  })
+  
+  console.log("!@!@");
+  myNotification.onclick = () => {
+    console.log('Notification clicked')
+  }
+
+  /*
+  let notif = new window.Notification( 'synchronous-message', {
     body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti, maxime explicabo dolores tenetur'
   })
+  
 
   // Also, we should add event handler for it. So, when user clicks on the notification our About window will show up.
   notif.onclick = function () {
-    window.ipcRenderer.send('show-about-window-event')
+    window.ipcRenderer.send('synchronous-message')
   }
+  */
 });
+
 
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
 
-  const exec = require('child_process').exec;
+  var rsync = new Rsync()
+    .shell('ssh')
+    .flags('av')
+    .source(pathToSrc)
+    .destination(pathToDest);
 
-  function execute(command, callback) {
-      exec(command, (error, stdout, stderr) => { 
-          callback(stdout); 
-      });
-  };
-
-
- execute('sudo rsync -avuzP --update --delete ../dest-folder/ ../sync-folder ', (output) => {
-  console.log(output);
-  sendNotification('show-about-window-event', output);
-});
+  rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
+  
+  rsync.execute(function(error, code, cmd) {
+  }, function(stdOutChunk){
+    body += stdOutChunk;
+    console.log(stdOutChunk.toString());
+    var s = stdOutChunk.includes('total size is');
+    if(s) {
+      sendNotification('synchronous-message', 'done');
+    }
+  });  
 
  
 });

@@ -14,7 +14,7 @@
     "electron-positioner": "^4.1.0"
   },
   "dependencies": {
-    "electron-reload": "^1.2.5",
-    "electron-sudo": "^4.0.12"
+    "electron-sudo": "^4.0.12",
+    "rsync": "^0.6.1"
   }
 }
