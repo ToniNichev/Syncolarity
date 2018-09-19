@@ -23,23 +23,9 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
     body: 'Lorem Ipsum Dolor Sit Amet'
   })
   
-  setTimeout(function() {
-    myNotification.onclick = () => {
-      console.log('Notification clicked')
-    }
-  }, 4000);
-
-  /*
-  let notif = new window.Notification( 'synchronous-message', {
-    body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti, maxime explicabo dolores tenetur'
-  })
-  
-
-  // Also, we should add event handler for it. So, when user clicks on the notification our About window will show up.
-  notif.onclick = function () {
-    window.ipcRenderer.send('synchronous-message')
+  myNotification.onclick = () => {
+    console.log('Notification clicked')
   }
-  */
 });
 
 
