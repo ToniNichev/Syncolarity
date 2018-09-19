@@ -1,5 +1,5 @@
 const Rsync = require('rsync');
-const SetupWindow = require('../SetupWindow');
+//const SetupWindow = require('../SetupWindow');
 
 var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/dest-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
 
