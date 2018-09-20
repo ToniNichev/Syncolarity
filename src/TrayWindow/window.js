@@ -1,5 +1,5 @@
 const Rsync = require('rsync');
-//const SetupWindow = require('../SetupWindow');
+
 
 var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
 
@@ -46,16 +46,19 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
     console.log(stdOutChunk.toString());
     var s = stdOutChunk.includes('total size is');
     if(s) {
-      sendNotification('synchronous-message', 'done');
+      sendNotification('Sync complete!', 'done');
     }
   });  
 });
 
 document.getElementById("setup").addEventListener("click", function (e) {
-  // setupWindow = new SetupWindow();
+  window.ipcRenderer.send('request-showing-of-setup-window');
+  
+  /*
   const remote = require('electron').remote;
   const BrowserWindow = remote.BrowserWindow;
 
   var win = new BrowserWindow({ width: 800, height: 600 });
   win.loadURL('www.google.com');
+  */
 });
