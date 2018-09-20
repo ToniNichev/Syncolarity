@@ -1,6 +1,6 @@
 const fs = require('fs');
-
 class Settings {
+  
   constructor() {
     this.loadSettings();
   }  
