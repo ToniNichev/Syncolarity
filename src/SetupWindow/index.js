@@ -1,8 +1,11 @@
 const {app, BrowserWindow} = require('electron');
 
-class SetupWindow {
+class TrayWindow {
 
   constructor() {
+    // Create the browser window.
+    //let win = new BrowserWindow({width: 800, height: 600})
+
     // Creation of the new window.
     this.window = new BrowserWindow({
           show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
@@ -14,7 +17,7 @@ class SetupWindow {
         });
   
     // and load the index.html of the app.
-    this.window.loadFile('./SetupWindow/index.html');
+    this.window.loadFile('./TrayWindow/index.html');
     this.window.webContents.openDevTools()
 
     this.window.on('blur', () => {
@@ -23,4 +26,4 @@ class SetupWindow {
   }
 }
 
-module.exports = SetupWindow;
+module.exports = TrayWindow;
