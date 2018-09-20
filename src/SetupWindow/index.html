@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <script type='text/javascript'>
+        // In such way we connect ipcRenderer to our page.
+        window.ipcRenderer = require('electron').ipcRenderer;
+        // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
+      </script>      
+      <link rel="stylesheet" media="screen" href="./styles.css" />
+      <title>Syncolarity</title>
+    </head>
+    <body>
+      <div></div>
+      <div id="header">
+        <button id="setup">setup</button>
+      </div>
+      <div id="footer">
+        <button id="btn-pull">pull</button>
+        <button id="btn-push">push</button>
+      </div>
+      <script src="window.js"></script>
+    </body>
+  </html>
