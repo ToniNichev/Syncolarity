@@ -16,17 +16,6 @@ app.on('quit-app', function() {
   app.quit();
 });
 
-ipcMain.on('synchronous-message1', function() {
-  console.log("!!!!!!!!!!!!");
+ipcMain.on('request-showing-of-main-window', function() {
   trayWindow.window.show();
 });
-
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.sender.send('asynchronous-reply', 'pong')
-})
-
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.returnValue = 'pong'
-})

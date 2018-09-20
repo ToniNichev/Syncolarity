@@ -1,40 +1,37 @@
 const Rsync = require('rsync');
 const SetupWindow = require('../SetupWindow');
 
-var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/dest-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
+var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
 
 let notif = null;
 let setupWindow = null;
 
-function sendNotification(notificationType, message) {
+function sendNotification(title, message, mainProcessNotificationType) {
 
-  notif = new window.Notification( 'Syncolarity', {
+  // shows notification panel
+  notif = new window.Notification( title, {
     body: message
   });
 
-
-  notif.onclick = function () {
-    window.ipcRenderer.send(notificationType);
+  // send notification to the main process if needed
+  if(mainProcessNotificationType != null) {
+    notif.onclick = function () {
+      window.ipcRenderer.send(mainProcessNotificationType);
+    }
   }
 }
 
 
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
-
-  let myNotification = new Notification('Title', {
-    body: 'Lorem Ipsum Dolor Sit Amet'
-  })
-
-  myNotification.onclick = () => {
-    console.log('Notification clicked')
-  }
+  sendNotification('Sync Completed!', 'Sync just completed!', 'request-showing-of-main-window');
 });
 
 
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
 
+  console.log("@#@#@");
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
