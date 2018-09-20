@@ -1,15 +1,19 @@
 const {app, ipcMain} = require('electron');
 const TrayWindow = require('./TrayWindow');
 const TrayIcon = require('./TrayIcon');
-const SetupWindow = require('./SetupWindow');
+const SettingsWindow = require('./SettingsWindow');
+// const Settings = require('./Settings');
   
 let trayWindow = null;
 let trayIcon = null;
+//let settings = null;
+let settingsWindow = null;
   
 app.on('ready', function() {
   trayWindow = new TrayWindow();
   trayIcon = new TrayIcon(trayWindow.window);
-  setupWindow = new SetupWindow();
+  settingsWindow = new SettingsWindow();
+  //settings = new Settings();
 });
 
 app.on('quit-app', function() {
@@ -21,6 +25,8 @@ ipcMain.on('request-showing-of-main-window', function() {
   trayWindow.window.show();
 });
 
-ipcMain.on('request-showing-of-setup-window', function() {
-  setupWindow.window.show();
+ipcMain.on('request-showing-of-settting-window', function() {
+  settingsWindow.window.show();
 });
+
+

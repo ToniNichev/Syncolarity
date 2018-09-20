@@ -1,6 +1,6 @@
-const {app, BrowserWindow} = require('electron');
+const {BrowserWindow, ipcMain} = require('electron');
 
-class SetupWindow {
+class SettingsWindow {
 
   constructor() {
     // Creating setup window
@@ -14,14 +14,21 @@ class SetupWindow {
         });
   
     // and load the index.html of the app.
-    //this.window.loadFile('./SetupWindow/index.html');
-    this.window.loadURL('file://' + __dirname + '/index.html');
-    this.window.webContents.openDevTools()
-
+    this.window.loadFile('./SettingsWindow/index.html');
+    //this.window.loadURL('file://' + __dirname + '/index.html');
+    this.window.webContents.openDevTools();
+    
     this.window.on('blur', () => {
       this.window.hide();
-    });    
+    });   
+    
+    ipcMain.on('settings-window-message', function() {
+      console.log("########## settings-window-message");
+    });        
   }
+
 }
 
-module.exports = SetupWindow;
+
+
+module.exports = SettingsWindow;

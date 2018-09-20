@@ -1,6 +1,6 @@
 'use strict'
-//const remote = require('remote');
 const remote = require('electron').remote;
+const ipc = require('electron').ipcRenderer;
 
 var syncFolderPath='',remoteServerUrl='';
 
@@ -11,8 +11,10 @@ document.getElementById("select-sync-folder").addEventListener("click", function
   if (selection && selection[0]) {
     console.log('got Selection');
   }
+  syncFolderPath = selection[0];
+  document.getElementById("sync-folder").value = syncFolderPath;
+});
 
-  console.log(selection);
-
-  syncFolderPath = selection[0];  
+document.getElementById("test").addEventListener("click", function (e) {
+window.ipcRenderer.send("settings-window-message");
 });

@@ -31,7 +31,6 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
 
-  console.log("@#@#@");
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
@@ -52,13 +51,5 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
 });
 
 document.getElementById("setup").addEventListener("click", function (e) {
-  window.ipcRenderer.send('request-showing-of-setup-window');
-  
-  /*
-  const remote = require('electron').remote;
-  const BrowserWindow = remote.BrowserWindow;
-
-  var win = new BrowserWindow({ width: 800, height: 600 });
-  win.loadURL('www.google.com');
-  */
+  window.ipcRenderer.send('request-showing-of-settting-window');
 });
