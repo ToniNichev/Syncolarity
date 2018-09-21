@@ -21,4 +21,5 @@ window.ipcRenderer.send("settings-window-message");
 
 ipc.on('update-config', (event, config) => {
   document.getElementById("sync-folder").value = config.syncFolder;
+  document.getElementById("remote-server").value = config.syncFolder;
 })

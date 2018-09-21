@@ -1,4 +1,4 @@
 {
-  "serverUrl": "myserver.com",
+  "remote-server": "myserver.com",
   "sync-folder": "test 123"
 }

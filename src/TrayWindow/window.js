@@ -1,4 +1,5 @@
 const Rsync = require('rsync');
+const ipc = require('electron').ipcRenderer;
 
 
 var pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder/', pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test', body='';
@@ -53,3 +54,7 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
 document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
+
+ipc.on('update-config', (event, config) => {
+  console.log("WWWWWW", config.syncFolder);
+})
