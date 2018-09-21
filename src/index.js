@@ -2,18 +2,18 @@ const {app, ipcMain} = require('electron');
 const TrayWindow = require('./TrayWindow');
 const TrayIcon = require('./TrayIcon');
 const SettingsWindow = require('./SettingsWindow');
-const Settings = require('./Settings');
+const AppSettings = require('./AppSettings');
   
 let trayWindow = null;
 let trayIcon = null;
-//let settings = null;
+let appSettings = null;
 let settingsWindow = null;
   
 app.on('ready', function() {
-  trayWindow = new TrayWindow();
+  appSettings = new AppSettings();  
+  trayWindow = new TrayWindow(appSettings);
   trayIcon = new TrayIcon(trayWindow.window);
-  settingsWindow = new SettingsWindow();
-  //mysettings = new Settings();
+  settingsWindow = new SettingsWindow(appSettings);
 });
 
 app.on('quit-app', function() {

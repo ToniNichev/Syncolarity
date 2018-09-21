@@ -18,3 +18,7 @@ document.getElementById("select-sync-folder").addEventListener("click", function
 document.getElementById("test").addEventListener("click", function (e) {
 window.ipcRenderer.send("settings-window-message");
 });
+
+ipc.on('update-config', (event, config) => {
+  document.getElementById("sync-folder").value = config.syncFolder;
+})

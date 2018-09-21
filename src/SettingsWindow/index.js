@@ -2,7 +2,7 @@ const {BrowserWindow, ipcMain} = require('electron');
 
 class SettingsWindow {
 
-  constructor() {
+  constructor(appSettings) {
     // Creating setup window
     this.window = new BrowserWindow({
           show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
@@ -13,18 +13,22 @@ class SettingsWindow {
           resizable: false
         });
   
-    // and load the index.html of the app.
     this.window.loadFile('./SettingsWindow/index.html');
-    //this.window.loadURL('file://' + __dirname + '/index.html');
     this.window.webContents.openDevTools();
     
     this.window.on('blur', () => {
       this.window.hide();
     });   
+
+    this.window.on('show', () => {
+      this.window.webContents.send('update-config', appSettings.config);
+    });      
     
+    /*
     ipcMain.on('settings-window-message', function() {
-      console.log("########## settings-window-message");
-    });        
+      console.log("########## settings-window-message", appSettings);
+    });
+    */        
   }
 
 }
