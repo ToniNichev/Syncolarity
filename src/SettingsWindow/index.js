@@ -21,6 +21,7 @@ class SettingsWindow {
     });   
 
     this.window.on('show', () => {
+      //appSettings.saveSettings();
       this.window.webContents.send('update-config', appSettings);
     });            
   }

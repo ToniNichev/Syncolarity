@@ -5,7 +5,7 @@ let appSettings = null;
 
 
 document.getElementById("select-sync-folder").addEventListener("click", function (e) {
-  var dialog = remote.dialog
+  var dialog = remote.dialog;
   var selection = dialog.showOpenDialog({ properties: ['openDirectory']})
 
   if (selection && selection[0]) {
@@ -17,6 +17,7 @@ document.getElementById("select-sync-folder").addEventListener("click", function
 
 document.getElementById("save").addEventListener("click", function (e) {
   // window.ipcRenderer.send("settings-window-message-save");
+  debugger;
   appSettings.saveSettings();
 });
 
