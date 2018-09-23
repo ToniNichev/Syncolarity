@@ -1,5 +1,4 @@
 const {BrowserWindow, ipcMain} = require('electron');
-const fs = require('fs');
 
 class SettingsWindow {
 
@@ -22,21 +21,9 @@ class SettingsWindow {
     });   
 
     this.window.on('show', () => {
-      this.window.webContents.send('update-config', appSettings.config);
-      //this.loadExcludeList();
+      this.window.webContents.send('update-config', appSettings);
     });            
   }
-
-  loadExcludeList() {
-    let filepath = './exclusions.conf';
-    fs.readFile(filepath, 'utf-8', (err, data) => {
-      if(err){
-          alert("An error ocurred reading the file :" + err.message);
-          return;
-      }    
-      this.window.webContents.send('update-exclusion-list', data);
-    });    
-  }  
 
 }
 

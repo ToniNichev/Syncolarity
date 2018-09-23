@@ -1,9 +1,8 @@
 'use strict'
 const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
-const fs = require('fs');
+let appSettings = null;
 
-var syncFolderPath='',remoteServerUrl='';
 
 document.getElementById("select-sync-folder").addEventListener("click", function (e) {
   var dialog = remote.dialog
@@ -17,27 +16,13 @@ document.getElementById("select-sync-folder").addEventListener("click", function
 });
 
 document.getElementById("save").addEventListener("click", function (e) {
-window.ipcRenderer.send("settings-window-message-save");
+  // window.ipcRenderer.send("settings-window-message-save");
+  appSettings.saveSettings();
 });
 
-ipc.on('update-config', (event, config) => {
-  document.getElementById("sync-folder").value = config.syncFolder;
-  document.getElementById("remote-server").value = config.syncFolder;
-})
-
-ipc.on('update-exclusion-list', (event, data) => {
-  document.getElementById("exclusion-list").value = data;
-})
-
-window.addEventListener('load', function() {
-  let filepath = './exclusions.conf';
-  fs.readFile(filepath, 'utf-8', (err, data) => {
-    if(err){
-        alert("An error ocurred reading the file :" + err.message);
-        return;
-    }    
-    document.getElementById("exclusion-list").value = data;
-  });    
+ipc.on('update-config', (event, AppSettings) => {
+  appSettings = AppSettings;
+  document.getElementById("sync-folder").value = appSettings.config.syncFolder;
+  document.getElementById("remote-server").value = appSettings.config.syncFolder;
+  document.getElementById("exclusion-list").value = appSettings.config.exclusinList;
 });
-
-

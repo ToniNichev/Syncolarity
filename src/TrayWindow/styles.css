@@ -16,3 +16,9 @@ body {
 #footer button {
   width: 49%;
 }
+
+#log {
+  overflow: auto;
+  height: 100px;
+  background: white;
+}

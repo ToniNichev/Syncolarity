@@ -6,7 +6,7 @@ const ipc = require('electron').ipcRenderer;
 let pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test';
 let body='';
 let _config = null;
-
+let mode = null;
 let notif = null;
 
 function sendNotification(title, message, mainProcessNotificationType) {
@@ -25,10 +25,12 @@ function sendNotification(title, message, mainProcessNotificationType) {
 }
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
+  mode = 'PULL';
   rsyncRequest(_config.serverUrl, _config.syncFolder);
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
+  mode = 'PUSH';
   rsyncRequest(_config.syncFolder, _config.serverUrl);
 });
 
@@ -40,21 +42,41 @@ function rsyncRequest(from, to) {
     .destination(to);
 
   rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
-  
+
+  addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>");
+
   rsync.execute(function(error, code, cmd) {
   }, function(stdOutChunk){
     body += stdOutChunk;
-    console.log(stdOutChunk.toString());
-    const msg = stdOutChunk.includes('total size is');
+    addToLogWindow(stdOutChunk.toString());
+
+    const msg = body.includes('total size is');
     if(msg) {
-      sendNotification('Sync complete!', msg);
+      sendNotification('Sync complete!', stdOutChunk);
     }
   });
+}
+
+function addToLogWindow(msg) {
+  msg = msg.split("\n").join("<br>");
+  let log = document.getElementById("log").innerHTML;  
+  document.getElementById("log").innerHTML = log + msg;
 }
 
 document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
 });
+
+document.getElementById("expand-log").addEventListener("click", function (e) {
+  if(document.getElementById("log").style.height == "400px") {
+    document.getElementById("log").style.height = "100px";
+  }
+  else {
+    document.getElementById("log").style.height = "400px";
+  }
+
+});
+
 
 ipc.on('update-config', (event, config) => {
   _config = config;
