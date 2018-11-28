@@ -1,0 +1,58 @@
+body {
+  background: silver;
+  padding: 0px;
+  margin: 0px;
+}
+
+#footer {
+  padding: 0px;
+  margin: 0px;  
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+#footer button {
+  width: 49%;
+}
+
+input {
+  width: 100%;
+}
+
+.locationHolder {
+  display: flex;
+}
+
+textarea {
+  width: 100%;
+}
+
+.settings {
+  display: flex;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 3px;
+}
+.settings input {
+  width: 15px;
+}
+
+.settings label {
+  padding-right: 10px;
+}
+
+#panelsContainer {
+  display: none;
+}
+
+#header {
+  background: blue;
+  color: white;
+  padding: 5px;
+}
+
+#header > span:nth-child(2) {
+  float: right;
+}

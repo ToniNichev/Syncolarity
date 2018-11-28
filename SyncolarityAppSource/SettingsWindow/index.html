@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <script type='text/javascript'>
+        // In such way we connect ipcRenderer to our page.
+        window.ipcRenderer = require('electron').ipcRenderer;
+        // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
+      </script>      
+      <link rel="stylesheet" media="screen" href="./styles.css" />
+      <title>Syncolarity - Settings</title>
+    </head>
+    <body>
+      <div id="panelsContainer">
+          <div id='settingsPannel' class='settingsPannel'>
+              <div class='settings'>
+                <button>X</button>
+                <input type="checkbox"><label for="male">One</label>
+                <input type="checkbox"><label for="male">Two</label>
+                <input type="checkbox"><label for="male">Three</label>
+                <input type="checkbox"><label for="male">Four</label>
+                <input type="checkbox"><label for="male">Five</label>
+              </div>
+              <div class="locationHolder">
+                <input type="textarea" id="sync-folder" placeholder="local file location"><button id="select-sync-folder">s</button><br>
+              </div>          
+              <input type="text" id="remote-server" placeholder="remote location">        
+              <textarea rows=10 id="exclusion-list" placeholder="ignore list. Add each ignored file type on a new line"></textarea>
+            </div>
+      </div>
+
+      <div id="header"><span>Settings</span><span><button onclick="addNewSettingsPanel()">+</button></span></div>
+      <div id='settingsList'></div>
+      
+      <button id="save">save</button>
+      
+      <script src="window.js"></script>
+    </body>
+  </html>
