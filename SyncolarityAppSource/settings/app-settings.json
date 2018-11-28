@@ -1,3 +1,1 @@
-{
-  "syncConfigs":[]
-}
+{"syncConfigs":[{"syncFolder":"1","serverUrl":"2","exclusions":"3"},{"syncFolder":"7","serverUrl":"8","exclusions":"9"}]}

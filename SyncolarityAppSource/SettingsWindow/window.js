@@ -10,8 +10,17 @@ function configLoaded() {
   document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
   var co = 0;
   appSettings.config.syncConfigs.map((config) => {
+    document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
-    addOpenFloderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));   
+    addOpenFloderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
+    
+    document.querySelectorAll('#settingsList > #settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e){  
+      var index = e.target.parentElement.parentElement.getAttribute('key');
+      var child = document.querySelectorAll('#settingsList > #settingsPannel')[index];
+      document.querySelector('#settingsList').removeChild( child );
+
+      
+    }); 
     
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value = config.exclusions;
@@ -53,14 +62,12 @@ function addNewSettingsPanel() {
   addOpenFloderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
 }
 
-let appSettings = new AppSettings(configLoaded);
-
-
 /**
  * SAVE buton clicked
  */
 document.getElementById("save").addEventListener("click", function (e) {
   var co = 0;
+  appSettings.config.syncConfigs = [];
   var len = document.querySelectorAll('#settingsList .settingsPannel').length;
   for(var co = 0; co < len ;co ++) {
     var config = {};
@@ -92,3 +99,5 @@ function returnPanels(numberPanels) {
   }
   return html;
 }
+
+let appSettings = new AppSettings(configLoaded);
