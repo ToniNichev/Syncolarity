@@ -1,12 +1,7 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const AppSettings = require('../AppSettings');
-
-/*
-let appSettings = new AppSettings(function() {
-  _config = appSettings.config.syncConfigs;
-});
-*/
+const rsyncFactory = require('../rsyncFactory');
 
 
 let body='';
@@ -31,14 +26,14 @@ function sendNotification(title, message, mainProcessNotificationType) {
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   mode = 'PULL';
-  rsyncRequest(_config.serverUrl, _config.syncFolder, prepareExcludeList(_config.exclusions));
+  rsyncFactory.rsyncRequest(_config.serverUrl, _config.syncFolder, prepareExcludeList(_config.exclusions));
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
   mode = 'PUSH';
   for(var q=0;q <  _config.length; q++) {
     var config = _config[q];
-    rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
+    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
   }
 });
 
@@ -47,29 +42,6 @@ function prepareExcludeList(rawList) {
   return list;
 }
 
-function rsyncRequest(from, to, excludeList) {
-  var rsync = new Rsync()
-    .shell('ssh')
-    .flags('av')
-    .source(from + '/')
-    .destination(to);
-
-  //rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
-  rsync.set('a').set('v').set('u').set('z').set('P').set('progress').exclude(excludeList);
-
-  addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>");
-
-  rsync.execute(function(error, code, cmd) {
-  }, function(stdOutChunk){
-    body += stdOutChunk;
-    addToLogWindow(stdOutChunk.toString());
-
-    const msg = body.includes('total size is');
-    if(msg) {
-      sendNotification('Sync complete!', stdOutChunk);
-    }
-  });
-}
 
 function addToLogWindow(msg) {
   msg = msg.split("\n").join("<br>");
@@ -91,13 +63,8 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 
 });
 
-window.onload = function() {
-  alert("!@!");
-}
-
 ipc.on('update-config', (event, config) => {
  let appSettings = new AppSettings(function() {
   _config = appSettings.config.syncConfigs;
-  debugger;
   });  
 })
