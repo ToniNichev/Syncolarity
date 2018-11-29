@@ -2,9 +2,11 @@ const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
 const AppSettings = require('../AppSettings');
 
+/*
 let appSettings = new AppSettings(function() {
   _config = appSettings.config.syncConfigs;
 });
+*/
 
 
 let body='';
@@ -33,17 +35,14 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
-  debugger;
   mode = 'PUSH';
   for(var q=0;q <  _config.length; q++) {
     var config = _config[q];
-    debugger;
     rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
   }
 });
 
 function prepareExcludeList(rawList) {
-  debugger;
   var list = rawList.split('\n');
   return list;
 }
@@ -92,8 +91,13 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 
 });
 
-/*
+window.onload = function() {
+  alert("!@!");
+}
+
 ipc.on('update-config', (event, config) => {
-  _config = config;
+ let appSettings = new AppSettings(function() {
+  _config = appSettings.config.syncConfigs;
+  debugger;
+  });  
 })
-*/

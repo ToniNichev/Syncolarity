@@ -18,11 +18,11 @@ class TrayWindow {
     this.window.loadFile('./TrayWindow/index.html');
     this.window.webContents.openDevTools();
 
-    /*
+
     this.window.on('show', () => {
       this.window.webContents.send('update-config', appSettings.config);
     });      
-    */
+
 
     this.window.on('blur', () => {
       this.window.hide();

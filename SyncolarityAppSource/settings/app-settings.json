@@ -1,1 +1,1 @@
-{"syncConfigs":[{"syncFolder":"/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder","serverUrl":"toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test/one","exclusions":"one.txt"}]}
+{"syncConfigs":[{"syncFolder":"/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder","serverUrl":"toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test/one","exclusions":"one.txt\ntwo.txt\n/exclude"}]}
