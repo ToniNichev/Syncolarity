@@ -12,14 +12,13 @@ function configLoaded() {
   appSettings.config.syncConfigs.map((config) => {
     document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
-    addOpenFloderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
+    addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
     
-    document.querySelectorAll('#settingsList > #settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e){  
+    document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) {
+      debugger;  
       var index = e.target.parentElement.parentElement.getAttribute('key');
-      var child = document.querySelectorAll('#settingsList > #settingsPannel')[index];
-      document.querySelector('#settingsList').removeChild( child );
-
-      
+      var child = document.querySelectorAll('#settingsList > .settingsPannel')[index];
+      document.querySelector('#settingsList').removeChild( child );  
     }); 
     
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
@@ -39,7 +38,7 @@ function configLoaded() {
   }); 
 }
 
-function addOpenFloderLocation(e) {
+function addOpenFolderLocation(e) {
   e.addEventListener('click', function(e){
     var dialog = remote.dialog;
     var selection = dialog.showOpenDialog({ properties: ['openDirectory']})
@@ -55,11 +54,13 @@ function addOpenFloderLocation(e) {
  * adding new settings pannel
  */
 function addNewSettingsPanel() {
+  var last = document.querySelectorAll('#settingsList .settingsPannel').length;  
   var element = document.createElement('div');
-  element.innerHTML = returnPanels(1);
+  element.innerHTML = document.querySelector('#panelsContainer > .settingsPannel').innerHTML;
+  element.setAttribute('class', 'settingsPannel');
+  element.setAttribute('key', last);
   document.querySelector("#settingsList").appendChild(element);
-  var last = document.querySelectorAll('#settingsList .settingsPannel').length - 1;
-  addOpenFloderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
+  addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
 }
 
 /**

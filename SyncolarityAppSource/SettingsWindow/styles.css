@@ -56,3 +56,12 @@ textarea {
 #header > span:nth-child(2) {
   float: right;
 }
+
+.settingsPannel {
+  
+  transition: height 1s;
+}
+
+.settingsPannelExpanded {
+  height: 100%;
+}
