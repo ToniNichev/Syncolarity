@@ -13,11 +13,9 @@ function configLoaded() {
     document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
     addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
-    
-    document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) {
-      debugger;  
-      var index = e.target.parentElement.parentElement.getAttribute('key');
-      var child = document.querySelectorAll('#settingsList > .settingsPannel')[index];
+    // remove sync pannel button
+    document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) { 
+      var child = e.target.parentElement.parentElement;
       document.querySelector('#settingsList').removeChild( child );  
     }); 
     

@@ -1,9 +1,12 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
+const AppSettings = require('../AppSettings');
+
+let appSettings = new AppSettings(function() {
+  _config = appSettings.config.syncConfigs;
+});
 
 
-//let pathToSrc='/Users/toninichev/Cloud/workspace/electron/Syncolarity/sync-folder/';
-let pathToDest='toninichev@toninichev.com:/Users/toninichev/Downloads/sync-test';
 let body='';
 let _config = null;
 let mode = null;
@@ -26,22 +29,34 @@ function sendNotification(title, message, mainProcessNotificationType) {
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   mode = 'PULL';
-  rsyncRequest(_config.serverUrl, _config.syncFolder);
+  rsyncRequest(_config.serverUrl, _config.syncFolder, prepareExcludeList(_config.exclusions));
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
+  debugger;
   mode = 'PUSH';
-  rsyncRequest(_config.syncFolder, _config.serverUrl);
+  for(var q=0;q <  _config.length; q++) {
+    var config = _config[q];
+    debugger;
+    rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
+  }
 });
 
-function rsyncRequest(from, to) {
+function prepareExcludeList(rawList) {
+  debugger;
+  var list = rawList.split('\n');
+  return list;
+}
+
+function rsyncRequest(from, to, excludeList) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
     .source(from + '/')
     .destination(to);
 
-  rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
+  //rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
+  rsync.set('a').set('v').set('u').set('z').set('P').set('progress').exclude(excludeList);
 
   addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>");
 
@@ -77,7 +92,8 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 
 });
 
-
+/*
 ipc.on('update-config', (event, config) => {
   _config = config;
 })
+*/
