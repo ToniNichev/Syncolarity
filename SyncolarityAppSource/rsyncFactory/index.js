@@ -7,6 +7,13 @@ function loadConfig() {
   });  
 }
 
+function rsyncAll() {
+  for(var q=0;q <  _config.length; q++) {
+    var config = _config[q];
+    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
+  }
+}
+
 function rsyncRequest(from, to, excludeList) {
   var rsync = new Rsync()
     .shell('ssh')
@@ -48,5 +55,7 @@ function sendNotification(title, message, mainProcessNotificationType) {
 
 
 module.exports =  {
-  rsyncRequest: rsyncRequest
+  loadConfig: loadConfig,
+  rsyncRequest: rsyncRequest,
+  rsyncAll: rsyncAll
 }

@@ -30,11 +30,7 @@ document.getElementById("btn-pull").addEventListener("click", function (e) {
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
-  mode = 'PUSH';
-  for(var q=0;q <  _config.length; q++) {
-    var config = _config[q];
-    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
-  }
+  rsyncFactory.rsyncAll();
 });
 
 function prepareExcludeList(rawList) {
@@ -65,6 +61,7 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 
 ipc.on('update-config', (event, config) => {
  let appSettings = new AppSettings(function() {
-  _config = appSettings.config.syncConfigs;
+    rsyncFactory.loadConfig();
+    _config = appSettings.config.syncConfigs;
   });  
 })
