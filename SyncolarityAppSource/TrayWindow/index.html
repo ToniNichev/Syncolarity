@@ -11,10 +11,26 @@
       <title>Syncolarity</title>
     </head>
     <body>
+      <div id="panelsContainer">
+          <div class='controlPannel'>
+              <div class='settings'>
+                <button>X</button>
+                <input type="checkbox"><label for="male">One</label>
+                <input type="checkbox"><label for="male">Two</label>
+                <input type="checkbox"><label for="male">Three</label>
+                <input type="checkbox"><label for="male">Four</label>
+                <input type="checkbox"><label for="male">Five</label>
+              </div>
+              <div class="buttonsHolder">
+                  <button class="button-push">push</button><button class="button-pull">pull</button>
+              </div>          
+            </div>
+      </div>      
       <div id="header">
         <button id="setup">setup</button>
       </div>
       <div id="body">
+        <div id='settingsList'></div>
         <div id="log"></div>
         <div id="controls">
           <button id="clear-log">clear</button>

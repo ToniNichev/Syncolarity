@@ -22,3 +22,37 @@ body {
   height: 100px;
   background: white;
 }
+
+.settings {
+  display: flex;
+  border: 1px solid white;
+  padding: 5px;
+  border-radius: 3px;
+}
+.settings input {
+  width: 15px;
+}
+
+.buttonsHolder {
+  display: flex;
+}
+
+#panelsContainer {
+  display: none;
+}
+
+.buttonsHolder > .button-push, .buttonsHolder > .button-pull {
+  width: 50%;
+}
+
+.settings label {
+  padding-right: 10px;
+}
+
+input {
+  width: 100%;
+}
+
+#footer button {
+  width: 49%;
+}

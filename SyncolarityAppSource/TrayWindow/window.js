@@ -63,5 +63,21 @@ ipc.on('update-config', (event, config) => {
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
     _config = appSettings.config.syncConfigs;
+    document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
+    var co = 0;
+    appSettings.config.syncConfigs.map((config) => {
+      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) { 
+        alert("!");
+      });
+      co ++;
+    });
   });  
 })
+
+function returnPanels(numberPanels) {
+  let html = '';
+  for(var q = 0;q < numberPanels; q++) {
+    html += document.querySelector('#panelsContainer > .controlPannel').outerHTML;
+  }
+  return html;
+}
