@@ -38,7 +38,6 @@ function prepareExcludeList(rawList) {
   return list;
 }
 
-
 function addToLogWindow(msg) {
   msg = msg.split("\n").join("<br>");
   let log = document.getElementById("log").innerHTML;  
@@ -59,6 +58,7 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 
 });
 
+// Create control panels
 ipc.on('update-config', (event, config) => {
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
@@ -67,7 +67,9 @@ ipc.on('update-config', (event, config) => {
     var co = 0;
     appSettings.config.syncConfigs.map((config) => {
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) { 
-        alert("!");
+        //rsyncFactory.
+        console.log(e);
+        alert(co);
       });
       co ++;
     });

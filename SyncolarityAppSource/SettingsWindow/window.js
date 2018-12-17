@@ -11,6 +11,7 @@ function configLoaded() {
   var co = 0;
   appSettings.config.syncConfigs.map((config) => {
     document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
+
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
     addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
     // remove sync pannel button
@@ -19,6 +20,7 @@ function configLoaded() {
       document.querySelector('#settingsList').removeChild( child );  
     }); 
     
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value = config.title; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value = config.exclusions;
     co ++;
