@@ -73,6 +73,7 @@ document.getElementById("save").addEventListener("click", function (e) {
   for(var co = 0; co < len ;co ++) {
     var config = {};
     config.syncFolder = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value;    
+    config.title = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value; 
     config.serverUrl = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value; 
     config.exclusions = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value;
     appSettings.config.syncConfigs.push(config);

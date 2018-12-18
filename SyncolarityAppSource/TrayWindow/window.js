@@ -65,11 +65,13 @@ ipc.on('update-config', (event, config) => {
     _config = appSettings.config.syncConfigs;
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
     var co = 0;
-    appSettings.config.syncConfigs.map((config) => {
-      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) { 
-        //rsyncFactory.
-        console.log(e);
-        alert(co);
+    appSettings.config.syncConfigs.map((config) => {      
+      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
+      document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
+      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
+        var id = e.srcElement.parentElement.parentElement.getAttribute('key');
+        console.log(">>>", _config[id]);
+        rsyncFactory.rsyncConfigId(id);
       });
       co ++;
     });

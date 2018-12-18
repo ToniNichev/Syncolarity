@@ -26,8 +26,8 @@ function rsyncRequest(from, to, excludeList) {
     .source(from + '/')
     .destination(to);
 
-  //rsync.set('a').set('v').set('u').set('z').set('P').set('progress').set('exclude-from', './exclusions.conf');
-  rsync.set('a').set('v').set('u').set('z').set('P').set('progress').exclude(excludeList);
+  if(excludeList[0])
+    rsync.set('a').set('v').set('u').set('z').set('P').set('progress').exclude(excludeList);
 
   addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>");
 
