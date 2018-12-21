@@ -18,13 +18,14 @@ body {
 }
 
 #log {
+  margin-top: 5px;
   overflow: auto;
   height: 100px;
   background: white;
 }
 
 .settings, .settings-pannel {
-  border: 1px solid white;
+  border-top: 1px solid white;
   padding: 5px;
   border-radius: 3px;
 }
@@ -34,6 +35,13 @@ body {
 
 .buttonsHolder {
   display: flex;
+}
+
+.buttonsHolder > button {
+  padding: 10px;
+  background: #658dff;
+  color: white;
+  cursor: pointer;
 }
 
 #panelsContainer {
@@ -58,4 +66,5 @@ input {
 
 .label {
   display: inline-flex;
+  font-weight: 600;
 }

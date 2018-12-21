@@ -68,11 +68,17 @@ ipc.on('update-config', (event, config) => {
     appSettings.config.syncConfigs.map((config) => {      
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
       document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
+      // push button
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
         var id = e.srcElement.parentElement.parentElement.getAttribute('key');
-        console.log(">>>", _config[id]);
-        rsyncFactory.rsyncConfigId(id);
+        rsyncFactory.rsyncConfigId(id, 'push');
       });
+      // pull button
+      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-pull').addEventListener('click', function(e) {         
+        var id = e.srcElement.parentElement.parentElement.getAttribute('key');
+        rsyncFactory.rsyncConfigId(id, 'pull');
+      });
+
       co ++;
     });
   });  

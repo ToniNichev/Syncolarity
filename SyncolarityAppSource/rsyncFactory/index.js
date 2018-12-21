@@ -10,24 +10,36 @@ function loadConfig() {
 function rsyncAll() {
   for(var q=0;q <  _config.length; q++) {
     var config = _config[q];
-    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
+    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), 'push', config.opt );
+    rsyncFactory.rsyncRequest(config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), 'pull', config.opt );
   }
 }
 
-function rsyncConfigId(id) {
+function rsyncConfigId(id, mode, opt) {
   var config = _config[id];
-  rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions));
+  if(mode == 'push')
+    rsyncFactory.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt);
+  else
+    rsyncFactory.rsyncRequest(config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt);
 }
 
-function rsyncRequest(from, to, excludeList) {
+function rsyncRequest(from, to, excludeList, mode, opt) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
     .source(from + '/')
     .destination(to);
+    
+
+  Object.keys(opt).forEach(function(key,index) {
+    console.log(">>>>", key);
+    rsync.set(key);
+  });    
+
+
 
   if(excludeList[0])
-    rsync.set('a').set('v').set('u').set('z').set('P').set('progress').exclude(excludeList);
+    rsync.exclude(excludeList);
 
   addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>");
 

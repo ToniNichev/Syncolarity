@@ -23,6 +23,12 @@ function configLoaded() {
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value = config.title; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value = config.serverUrl; 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value = config.exclusions;
+    // options
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked = config.opt.a;
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked = config.opt.u;
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked = config.opt.z;
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-progress').checked = config.opt.progress;
+
     co ++;
   });
 
@@ -76,6 +82,13 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.title = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#title').value; 
     config.serverUrl = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#remote-server').value; 
     config.exclusions = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('#exclusion-list').value;
+    // options
+    config.opt = {};
+    config.opt.a = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-a').checked;
+    config.opt.u = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-u').checked;
+    config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;
+    config.opt.progress = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-progress').checked;
+
     appSettings.config.syncConfigs.push(config);
   }  
   appSettings.saveSettings(appSettings.config);

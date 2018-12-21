@@ -7,17 +7,18 @@
         window.ipcRenderer = require('electron').ipcRenderer;
         // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
       </script>      
+      <link rel="stylesheet" media="screen" href="../global.css" />      
       <link rel="stylesheet" media="screen" href="./styles.css" />
+      <link href="https://fonts.googleapis.com/css?family=Cabin+Condensed|Khand|Montserrat" rel="stylesheet">
       <title>Syncolarity</title>
     </head>
     <body>
       <div id="panelsContainer">
           <div class='controlPannel'>
               <div class='settings'>
-                <button>X</button>
                 <div class="label">TEST</div>
                 <div class="settings-pannel">
-                  <input type="checkbox"><label for="male">One</label>
+                  <input type="checkbox"><label for="male">Disable authomatic sync</label>
                   <input type="checkbox"><label for="male">Two</label>
                   <input type="checkbox"><label for="male">Three</label>
                   <input type="checkbox"><label for="male">Four</label>
