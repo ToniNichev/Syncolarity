@@ -32,8 +32,8 @@ function rsyncRequest(from, to, excludeList, mode, opt) {
     
 
   Object.keys(opt).forEach(function(key,index) {
-    console.log(">>>>", key);
-    rsync.set(key);
+    if(opt[key])
+      rsync.set(key);
   });    
 
 
