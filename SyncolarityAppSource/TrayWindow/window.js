@@ -8,6 +8,7 @@ let body='';
 let _config = null;
 let mode = null;
 let notif = null;
+let interval = [];
 
 
 function sendNotification(title, message, mainProcessNotificationType) {
@@ -53,15 +54,14 @@ ipc.on('update-config', (event, config) => {
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
 
     // time based sync happens here
-    _config.forEach((element, id) => {
-      
-      interval = setInterval(() => {
+    _config.forEach((element, id) => {      
+      clearInterval(interval[id]);
+      let cfg = config.syncConfigs[id];
+      interval[id] = setInterval(() => {
         rsyncFactory.rsyncConfigId(id, 'push');
-      }, 5000);
+      }, cfg.interval);
+    });
 
-    })
-
-    
     
     var co = 0;
     appSettings.config.syncConfigs.map((config, id) => {  

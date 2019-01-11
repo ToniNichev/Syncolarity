@@ -22,10 +22,14 @@ class TrayWindow {
       this.window.webContents.send('update-config', appSettings.config);
     });      
 
-
     this.window.on('blur', () => {
       this.window.hide();
     });    
+
+    this.window.on('ready-to-show', () => {
+      // force the initial config to be executed
+      this.window.webContents.send('update-config', appSettings.config);
+    });
   }
 }
 
