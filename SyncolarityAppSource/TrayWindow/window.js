@@ -9,6 +9,7 @@ let _config = null;
 let mode = null;
 let notif = null;
 
+
 function sendNotification(title, message, mainProcessNotificationType) {
 
   // shows notification panel
@@ -34,38 +35,39 @@ document.getElementById("btn-push").addEventListener("click", function (e) {
 });
 
 function prepareExcludeList(rawList) {
+  if(typeof rawList == 'undefined') {
+    return [];
+  }
   var list = rawList.split('\n');
   return list;
 }
 
-function addToLogWindow(msg) {
-  msg = msg.split("\n").join("<br>");
-  let log = document.getElementById("log").innerHTML;  
-  document.getElementById("log").innerHTML = log + msg;
-}
-
-document.getElementById("setup").addEventListener("click", function (e) {
-  window.ipcRenderer.send('request-showing-of-settting-window');
-});
-
-document.getElementById("expand-log").addEventListener("click", function (e) {
-  if(document.getElementById("log").style.height == "400px") {
-    document.getElementById("log").style.height = "100px";
-  }
-  else {
-    document.getElementById("log").style.height = "400px";
-  }
-
-});
-
 // Create control panels
 ipc.on('update-config', (event, config) => {
+
+
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
     _config = appSettings.config.syncConfigs;
+
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
+
+    // time based sync happens here
+    _config.forEach((element, id) => {
+      
+      interval = setInterval(() => {
+        rsyncFactory.rsyncConfigId(id, 'push');
+      }, 5000);
+
+    })
+
+    
+    
     var co = 0;
-    appSettings.config.syncConfigs.map((config) => {      
+    appSettings.config.syncConfigs.map((config, id) => {  
+
+
+      // attach panel events.
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
       document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
       // push button

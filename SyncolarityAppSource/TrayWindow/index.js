@@ -8,7 +8,7 @@ class TrayWindow {
     this.window = new BrowserWindow({
       show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
       height: 810,
-      width: 925,
+      width: 1925,
       frame: false,  
       backgroundColor: '#E4ECEF',
       resizable: false
@@ -17,7 +17,6 @@ class TrayWindow {
     // and load the index.html of the app.
     this.window.loadFile('./TrayWindow/index.html');
     this.window.webContents.openDevTools();
-
 
     this.window.on('show', () => {
       this.window.webContents.send('update-config', appSettings.config);
