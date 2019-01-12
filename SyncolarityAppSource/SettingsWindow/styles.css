@@ -39,7 +39,7 @@ textarea {
 }
 
 .settings input {
-  width: 25px;
+  width: 35px;
 }
 
 .settings label {
@@ -68,3 +68,4 @@ textarea {
 .settingsPannelExpanded {
   height: 100%;
 }
+

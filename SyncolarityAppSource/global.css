@@ -3,3 +3,15 @@ body {
     font-family: 'Cabin Condensed', sans-serif;
     font-family: 'Khand', sans-serif;    
 }
+
+
+button {
+    background: #658dff;
+    color: white;
+    cursor: pointer;
+}
+  
+#save {
+    padding: 10px;
+    width: 100%;
+}
