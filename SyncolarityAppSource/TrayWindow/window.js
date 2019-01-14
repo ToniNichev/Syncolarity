@@ -57,9 +57,13 @@ ipc.on('update-config', (event, config) => {
     _config.forEach((element, id) => {      
       clearInterval(interval[id]);
       let cfg = _config[id];
-      interval[id] = setInterval(() => {
-        rsyncFactory.rsyncConfigId(id, 'push');
-      }, cfg.interval * 1000);
+      if(cfg.autosync) {
+        interval[id] = setInterval(() => {
+          rsyncFactory.rsyncConfigId(id, 'push', function() {
+            alert("!");
+          });
+        }, cfg.interval * 1000);
+      }
     });
 
     
@@ -93,3 +97,16 @@ function returnPanels(numberPanels) {
   }
   return html;
 }
+
+document.getElementById("clear-log").addEventListener("click", function (e) {
+  document.querySelector('#log').innerHTML = "";
+});
+
+document.getElementById("expand-log").addEventListener("click", function (e) {
+  if(document.getElementById("log").style.height == "400px") {
+    document.getElementById("log").style.height = "100px";
+  }
+  else {
+    document.getElementById("log").style.height = "400px";
+  }
+});
