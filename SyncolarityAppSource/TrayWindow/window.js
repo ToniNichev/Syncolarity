@@ -56,10 +56,10 @@ ipc.on('update-config', (event, config) => {
     // time based sync happens here
     _config.forEach((element, id) => {      
       clearInterval(interval[id]);
-      let cfg = config.syncConfigs[id];
+      let cfg = _config[id];
       interval[id] = setInterval(() => {
         rsyncFactory.rsyncConfigId(id, 'push');
-      }, cfg.interval);
+      }, cfg.interval * 1000);
     });
 
     

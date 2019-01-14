@@ -9,6 +9,13 @@ button {
     background: #658dff;
     color: white;
     cursor: pointer;
+    padding: 5px;
+    transition: background-color 500ms linear;
+}
+
+button:hover {
+    background: #2358e9;
+    cursor: pointer;
 }
   
 #save {

@@ -39,16 +39,13 @@ body {
 
 .buttonsHolder > button {
   padding: 10px;
-  background: #658dff;
-  color: white;
-  cursor: pointer;
 }
 
 #panelsContainer {
   display: none;
 }
 
-.buttonsHolder > .button-push, .buttonsHolder > .button-pull {
+.buttonsHolder > .button-push, .buttonsHolder > .button-pull, #clear-log, #expand-log {
   width: 50%;
 }
 
@@ -67,4 +64,8 @@ input {
 .label {
   display: inline-flex;
   font-weight: 600;
+}
+
+#controls {
+  display: flex;
 }
