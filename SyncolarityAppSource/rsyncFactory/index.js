@@ -17,18 +17,20 @@ function rsyncAll() {
 }
 
 function rsyncConfigId(id, mode, onComplete) {
+  //debugger;
   if(startedSyncIds.includes(id)) {
-    console.log("Sync in progress ... skipping !");
+    addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
   }
+  startedSyncIds.push(id);
   var config = _config[id];
   if(mode == 'push')
-    this.rsyncRequest(config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);
+    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);
   else
-    this.rsyncRequest(config.serverUrl, config.syncFolder, prepareExcludeList(optconfig.exclusions), mode, config.opt, onComplete);
+    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);  
 }
 
-function rsyncRequest(from, to, excludeList, mode, opt, onComplete) {
+function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
@@ -45,31 +47,31 @@ function rsyncRequest(from, to, excludeList, mode, opt, onComplete) {
   if(excludeList[0])
     rsync.exclude(excludeList);
 
-  addToLogWindow("<hr>" + mode + " : " + new Date().toString() + "<hr>", onComplete);
+  addToLogWindow(id, "<hr>" + mode + " " +  title + " : " + new Date().toString() + "<hr>", onComplete);
   
   
   rsync.execute(function(error, code, cmd, onComplete) {
   }, function(stdOutChunk){
     body += stdOutChunk;
-    addToLogWindow(stdOutChunk.toString(), onComplete);
+    addToLogWindow(id, stdOutChunk.toString(), onComplete);
   });
 }
 
-function addToLogWindow(msg, id, onComplete) {
+function addToLogWindow(id, msg, onComplete) {
   msg = msg.split("\n").join("<br>");
   let log = document.getElementById("log").innerHTML;  
   document.getElementById("log").innerHTML = log + msg;
 
   document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);
 
+  // if config completed, execute the code below.
   if(msg.includes('<br>total size is')) {
     console.log(">>> COMPLETE !");
-    sendNotification('Sync complete!', msg, null, onComplete);
     // when sync process finished, remove it from startedSyncIds
     startedSyncIds = startedSyncIds.filter(function(value, index, arr){
-      return value != 2;
-  
-  });
+      return value != id;  
+    });    
+    sendNotification('Sync complete!', msg, null, onComplete);
   }  
 }
 
@@ -81,7 +83,7 @@ document.getElementById("setup").addEventListener("click", function (e) {
 function sendNotification(title, message, mainProcessNotificationType, onComplete) {
   // shows notification panel
   notif = new window.Notification( title, {
-    body: "sync completed successfully!"
+    body: "Sync completed successfully!"
   });
 
   if(onComplete != null) {

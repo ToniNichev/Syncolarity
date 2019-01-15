@@ -8,8 +8,11 @@
         // The ipcRenderer module provides a few methods so you can send events from the render process (web page) to the main process.
       </script>      
       <link rel="stylesheet" media="screen" href="../global.css" />      
+      <link rel="stylesheet" media="screen" href="./logger.css" />      
       <link rel="stylesheet" media="screen" href="./styles.css" />
       <link href="https://fonts.googleapis.com/css?family=Cabin+Condensed|Khand|Montserrat" rel="stylesheet">
+      
+      <script defer src="https://use.fontawesome.com/releases/v5.6.3/js/all.js" integrity="sha384-EIHISlAOj4zgYieurP0SdoiBYfGJKkgWedPHH4jCzpCXLmzVsw1ouK59MuUtP4a1" crossorigin="anonymous"></script>
       <title>Syncolarity</title>
     </head>
     <body>
@@ -17,6 +20,7 @@
           <div class='controlPannel'>
               <div class='settings'>
                 <div class="label">TEST</div>
+                <!--
                 <div class="settings-pannel">
                   <input type="checkbox"><label for="male">Disable authomatic sync</label>
                   <input type="checkbox"><label for="male">Two</label>
@@ -24,6 +28,7 @@
                   <input type="checkbox"><label for="male">Four</label>
                   <input type="checkbox"><label for="male">Five</label>
                 </div>
+                -->
               </div>
               <div class="buttonsHolder">
                   <button class="button-push">push</button><button class="button-pull">pull</button>
@@ -35,15 +40,18 @@
       </div>
       <div id="body">
         <div id='settingsList'></div>
+        <div id="footer">
+          <div class="label">All</div>
+          <div class="buttonsHolder">
+            <button id="btn-push">push!!!</button>        
+            <button id="btn-pull">pull</button>
+          </div>
+        </div>        
         <div id="log"></div>
         <div id="controls">
           <button id="clear-log">clear</button>
           <button id="expand-log">expand</button>
         </div>
-      </div>
-      <div id="footer">
-        <button id="btn-push">push</button>        
-        <button id="btn-pull">pull</button>
       </div>
       <script src="window.js"></script>
     </body>

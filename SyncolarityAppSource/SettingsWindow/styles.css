@@ -1,11 +1,4 @@
 
-
-body {
-  background: silver;
-  padding: 0px;
-  margin: 0px;
-}
-
 #footer {
   padding: 0px;
   margin: 0px;  
@@ -39,7 +32,7 @@ textarea {
 }
 
 .settings input {
-  width: 35px;
+  width: auto;
 }
 
 .settings label {

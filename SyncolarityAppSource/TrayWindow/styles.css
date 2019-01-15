@@ -1,16 +1,12 @@
-body {
-  background: silver;
-  padding: 0px;
-  margin: 0px;
-}
-
 #footer {
   padding: 0px;
   margin: 0px;  
-  position: absolute;
-  bottom: 20px;
-  text-align: center;
   width: 100%;
+}
+
+#settingsList {
+  overflow: auto;
+  height: 400px;
 }
 
 #footer button {
@@ -37,10 +33,6 @@ body {
   display: flex;
 }
 
-.buttonsHolder > button {
-  padding: 10px;
-}
-
 #panelsContainer {
   display: none;
 }
@@ -58,7 +50,7 @@ input {
 }
 
 #footer button {
-  width: 49%;
+  width: 50%;
 }
 
 .label {

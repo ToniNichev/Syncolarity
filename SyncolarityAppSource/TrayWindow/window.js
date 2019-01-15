@@ -46,7 +46,6 @@ function prepareExcludeList(rawList) {
 // Create control panels
 ipc.on('update-config', (event, config) => {
 
-
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
     _config = appSettings.config.syncConfigs;
@@ -60,16 +59,14 @@ ipc.on('update-config', (event, config) => {
       if(cfg.autosync) {
         interval[id] = setInterval(() => {
           rsyncFactory.rsyncConfigId(id, 'push', function() {
-            alert("!");
+            rsyncFactory.rsyncConfigId(id, 'pull', null);
           });
         }, cfg.interval * 1000);
       }
     });
-
     
     var co = 0;
     appSettings.config.syncConfigs.map((config, id) => {  
-
 
       // attach panel events.
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;

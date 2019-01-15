@@ -2,6 +2,9 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-family: 'Cabin Condensed', sans-serif;
     font-family: 'Khand', sans-serif;    
+    padding: 0px;
+    margin: 0px;
+    background: rgb(241, 237, 237);
 }
 
 
