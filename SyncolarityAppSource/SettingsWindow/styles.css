@@ -35,6 +35,10 @@ textarea {
   width: auto;
 }
 
+#setup {
+  background: none;
+}
+
 .settings label {
   padding-right: 10px;
 }
