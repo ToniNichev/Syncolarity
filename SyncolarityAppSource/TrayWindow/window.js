@@ -83,10 +83,10 @@ ipc.on('update-config', (event, config) => {
         rsyncFactory.rsyncConfigId(id, 'pull');
       });
 
-      if(typeof rsyncFactory.startedSyncIds != 'undefined' && rsyncFactory.startedSyncIds.includes(''+ id)) {
+      // pulse active syncs 
+      if(rsyncFactory.getStartedSyncIds().includes(''+ id)) {
         document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
-      }
-
+      }      
       co ++;
     });
   });  
@@ -111,4 +111,10 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
   else {
     document.getElementById("log").style.height = "400px";
   }
+});
+
+
+
+document.getElementById("setup").addEventListener("click", function (e) {
+  window.ipcRenderer.send('request-showing-of-settting-window');
 });

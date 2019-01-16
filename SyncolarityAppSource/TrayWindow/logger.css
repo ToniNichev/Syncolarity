@@ -1,3 +1,25 @@
+#log {
+  font-size: 12px;
+  padding: 3px;
+}
+
 #log important {
     color: red;
+    display:block;
+}
+
+#log header {
+  border-top: 1px solid blue;
+  border-bottom: 1px solid blue;
+  color: blue;
+  padding: 5px;
+  font-weight: 500;
+  display:block;  
+}
+
+#log footer {
+  border-top: 1px solid green;
+  color: green;
+  font-weight: 500; 
+  display:block;  
 }

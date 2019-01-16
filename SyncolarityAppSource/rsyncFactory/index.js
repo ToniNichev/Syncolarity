@@ -1,8 +1,11 @@
 const AppSettings = require('../AppSettings');
 let appSettings = null;
-let startedSyncIds = [];
+var startedSyncIds = [];
+var disableLogScroll = false;
+var lastSyncStatus = [];
 
 function loadConfig() {
+  //debugger;
   appSettings = new AppSettings(function() {
     _config = appSettings.config.syncConfigs;
   });  
@@ -17,7 +20,6 @@ function rsyncAll() {
 }
 
 function rsyncConfigId(id, mode, onComplete) {
-  //debugger;
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
@@ -28,8 +30,6 @@ function rsyncConfigId(id, mode, onComplete) {
     this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);
   else
     this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);  
-
-  
 }
 
 function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
@@ -49,9 +49,12 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   if(excludeList[0])
     rsync.exclude(excludeList);
 
-  addToLogWindow(id, "<hr>" + mode + " " +  title + " : " + new Date().toString() + "<hr>", onComplete);
-
-  document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
+  const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-upload"></i>';
+  const _date = new Date().toString();
+  const _msg = "<header>" + m + " " +  title + " : " + _date + "</header>";
+  addToLogWindow(id, _msg, onComplete);
+  lastSyncStatus[id] = _msg;
+  document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");  
   
   
   rsync.execute(function(error, code, cmd, onComplete) {
@@ -63,26 +66,37 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
 
 function addToLogWindow(id, msg, onComplete) {
   msg = msg.split("\n").join("<br>");
-  let log = document.getElementById("log").innerHTML;  
-  document.getElementById("log").innerHTML = log + msg;
 
-  document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);
+  // if sync completed, execute the code below.
+  if(msg.includes('<br>total size is')) {    
+    msg = '<footer>' + msg + '</footer><br><br>';
 
-  // if config completed, execute the code below.
-  if(msg.includes('<br>total size is')) {
-    console.log(">>> COMPLETE !");
-    // when sync process finished, remove it from startedSyncIds
+    debugger;
+    document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
+    
+
+    document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
+    // remove startedSyncIds
     startedSyncIds = startedSyncIds.filter(function(value, index, arr){
       return value != id;  
-    });    
+    });   
     sendNotification('Sync complete!', msg, null, onComplete);
   }  
+  let log = document.getElementById("log").innerHTML;  
+  document.getElementById("log").innerHTML = log + msg;  
+  if(!disableLogScroll)
+    document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);  
 }
 
-
-document.getElementById("setup").addEventListener("click", function (e) {
-  window.ipcRenderer.send('request-showing-of-settting-window');
+document.querySelector('#log').addEventListener('mouseenter', function (e) {
+  disableLogScroll = true;
 });
+
+document.querySelector('#log').addEventListener('mouseleave', function (e) {
+  disableLogScroll = false;
+});
+ 
+ 
 
 function sendNotification(title, message, mainProcessNotificationType, onComplete) {
   // shows notification panel
@@ -102,11 +116,14 @@ function sendNotification(title, message, mainProcessNotificationType, onComplet
   }
 }
 
+function _getStartedSyncIds() {
+  return startedSyncIds;
+}
 
 module.exports =  {
   loadConfig: loadConfig,
   rsyncRequest: rsyncRequest,
   rsyncAll: rsyncAll,
   rsyncConfigId: rsyncConfigId,
-  startedSyncIds: startedSyncIds
+  getStartedSyncIds: _getStartedSyncIds
 }

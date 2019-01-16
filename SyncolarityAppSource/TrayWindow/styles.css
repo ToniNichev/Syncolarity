@@ -2,6 +2,7 @@
   padding: 0px;
   margin: 0px;  
   width: 100%;
+  border: 2px solid silver;
 }
 
 #settingsList {
@@ -30,6 +31,16 @@
   width: 15px;
 }
 
+.settings {
+  display: flex;
+}
+
+.settings > .status-pannel {
+  padding-left: 5px;
+}
+
+
+
 #settingsList button, #footer button {
   padding: 8px;
   border-radius: 25px;
@@ -37,6 +48,13 @@
   margin-right: 10px;
   font-size: 15px;
   background: #e5e7ec;
+  transition: all 350ms linear;
+}
+
+#settingsList button:hover, #footer button:hover {
+  background: #b8bdc9;
+  color: white;
+  cursor: pointer;
 }
 
 .buttonsHolder {
@@ -50,13 +68,6 @@
 
 .buttonsHolder > .button-push, .buttonsHolder > .button-pull, #clear-log, #expand-log {
   width: 50%;
-}
-button {
-  background: rgb(241, 237, 237);
-}
-
-button:hover {
-  background: #b8bdc9;
 }
 
 .settings label {
@@ -98,12 +109,15 @@ input {
 
 @keyframes color {
   0% {
-    background-color: #222;
+    background-color: #e5e7ec;
   }
   50% {
-    background-color: #4285f4;
+    background-color: #b0c5e7;
   }
   100 {
     background-color: #222;
   }
 }
+
+
+
