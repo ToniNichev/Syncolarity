@@ -31,10 +31,12 @@
 }
 
 #settingsList button, #footer button {
-  padding: 12px;
+  padding: 8px;
   border-radius: 25px;
   margin-left: 10px;
   margin-right: 10px;
+  font-size: 15px;
+  background: #e5e7ec;
 }
 
 .buttonsHolder {
@@ -49,6 +51,13 @@
 .buttonsHolder > .button-push, .buttonsHolder > .button-pull, #clear-log, #expand-log {
   width: 50%;
 }
+button {
+  background: rgb(241, 237, 237);
+}
+
+button:hover {
+  background: #b8bdc9;
+}
 
 .settings label {
   padding-right: 10px;
@@ -58,11 +67,7 @@ input {
   width: 100%;
 }
 #footer {
-  background: rgb(207, 202, 202);
-}
-
-#footer button {
-  width: 50%;
+  background: rgb(228, 228, 228);
 }
 
 #footer > .label {
@@ -76,4 +81,29 @@ input {
 
 #controls {
   display: flex;
+}
+
+#setup {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.pulse {
+  animation-name: color;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes color {
+  0% {
+    background-color: #222;
+  }
+  50% {
+    background-color: #4285f4;
+  }
+  100 {
+    background-color: #222;
+  }
 }

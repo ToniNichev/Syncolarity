@@ -5,15 +5,11 @@ body {
     font-weight: 300;
     padding: 0px;
     margin: 0px;
-    background: rgb(241, 237, 237);
 }
 
 
 button {
-    background: #e5e7ec;
-    color: black;
     cursor: pointer;
-    padding: 5px;
     transition: background-color, color 350ms linear;
 }
 
@@ -26,4 +22,8 @@ button:hover {
 #save {
     padding: 10px;
     width: 100%;
+}
+
+.header {
+    background: rgb(239, 237, 237);
 }
