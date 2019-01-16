@@ -46,6 +46,7 @@ function prepareExcludeList(rawList) {
 // Create control panels
 ipc.on('update-config', (event, config) => {
 
+
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
     _config = appSettings.config.syncConfigs;
@@ -81,6 +82,10 @@ ipc.on('update-config', (event, config) => {
         var id = e.srcElement.parentElement.parentElement.getAttribute('key');
         rsyncFactory.rsyncConfigId(id, 'pull');
       });
+
+      if(typeof rsyncFactory.startedSyncIds != 'undefined' && rsyncFactory.startedSyncIds.includes(''+ id)) {
+        document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
+      }
 
       co ++;
     });

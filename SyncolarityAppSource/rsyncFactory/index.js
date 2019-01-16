@@ -28,6 +28,8 @@ function rsyncConfigId(id, mode, onComplete) {
     this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);
   else
     this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);  
+
+  
 }
 
 function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
@@ -48,6 +50,8 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
     rsync.exclude(excludeList);
 
   addToLogWindow(id, "<hr>" + mode + " " +  title + " : " + new Date().toString() + "<hr>", onComplete);
+
+  document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
   
   
   rsync.execute(function(error, code, cmd, onComplete) {
@@ -103,5 +107,6 @@ module.exports =  {
   loadConfig: loadConfig,
   rsyncRequest: rsyncRequest,
   rsyncAll: rsyncAll,
-  rsyncConfigId: rsyncConfigId
+  rsyncConfigId: rsyncConfigId,
+  startedSyncIds: startedSyncIds
 }
