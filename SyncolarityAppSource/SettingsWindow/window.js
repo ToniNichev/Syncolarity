@@ -16,7 +16,7 @@ function configLoaded() {
     addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
     // remove sync pannel button
     document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) { 
-      var child = e.target.parentElement.parentElement;
+      var child = e.target.parentElement.parentElement.parentElement.parentElement;
       document.querySelector('#settingsList').removeChild( child );  
     }); 
     

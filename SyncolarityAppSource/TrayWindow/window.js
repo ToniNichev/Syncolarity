@@ -108,12 +108,11 @@ document.getElementById("clear-log").addEventListener("click", function (e) {
 });
 
 document.getElementById("expand-log").addEventListener("click", function (e) {
-  if(document.getElementById("log").style.height == "400px") {
-    document.getElementById("log").style.height = "100px";
-  }
-  else {
-    document.getElementById("log").style.height = "400px";
-  }
+    if(document.getElementById("logWrapper").classList.contains("logWrapperExpanded")) 
+      document.getElementById("logWrapper").classList.remove('logWrapperExpanded');    
+    else
+      document.getElementById("logWrapper").classList.add('logWrapperExpanded');    
+    
 });
 
 

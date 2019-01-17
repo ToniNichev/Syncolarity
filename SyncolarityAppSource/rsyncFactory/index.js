@@ -20,6 +20,7 @@ function rsyncAll() {
 }
 
 function rsyncConfigId(id, mode, onComplete) {
+  window.ipcRenderer.send('sync-started');
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
@@ -73,16 +74,21 @@ function addToLogWindow(id, msg, onComplete) {
 
   // if sync completed, execute the code below.
   if(msg.includes('<br>total size is')) {    
+  
+    // tray notification
+    var trayMsg = msg.split('total size');
+    trayMsg = trayMsg[0].replace(/<br>/g, '');
+    sendNotification('Sync complete!', trayMsg, 'request-showing-of-main-window', onComplete);
+    // footar and status notification msg
     msg = '<footer>' + msg + '</footer><br><br>';
-
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-    
+    // remove pannel pulse
     document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
     // remove startedSyncIds
     startedSyncIds = startedSyncIds.filter(function(value, index, arr){
       return value != id;  
     });   
-    sendNotification('Sync complete!', msg, null, onComplete);
+
   }  
   let log = document.getElementById("log").innerHTML;  
   document.getElementById("log").innerHTML = log + msg;  
@@ -103,19 +109,19 @@ document.querySelector('#log').addEventListener('mouseleave', function (e) {
 function sendNotification(title, message, mainProcessNotificationType, onComplete) {
   // shows notification panel
   notif = new window.Notification( title, {
-    body: "Sync completed successfully!"
+    body: message
   });
-
-  if(onComplete != null) {
-    onComplete();
-  }
 
   // send notification to the main process if needed
   if(mainProcessNotificationType != null) {
     notif.onclick = function () {
       window.ipcRenderer.send(mainProcessNotificationType);
-    }
+    }    
   }
+  
+  if(onComplete != null) {
+    onComplete();
+  }  
 }
 
 function _getStartedSyncIds() {

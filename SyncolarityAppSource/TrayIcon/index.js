@@ -1,11 +1,11 @@
 const { BrowserWindow, Tray } = require('electron');
 const Positioner = require('electron-positioner');
 
-class TrayIcon {
+class TrayIcon {  
   constructor(trayWindow) {
-    let iconPath = './icons/icon-22.png';
+    this.iconId = 1;
+    this.trayIcon = new Tray('./icons/tray-icon-' + this.iconId + '.png');
 
-    this.trayIcon = new Tray(iconPath);
     this.trayIcon.setToolTip('Syncolarity'); 
 
     this.trayIcon.on('click', (e, bounds) => {
@@ -18,6 +18,16 @@ class TrayIcon {
         trayWindow.show();
       }
     });    
+  }
+
+  animate() {
+    setInterval( () => {
+      this.trayIcon.destroy();
+      this.iconId > 2 ? 1 : this.iconId;
+      console.log(">>>", this.iconId);
+      this.trayIcon = new Tray('./icons/tray-icon-' + this.iconId + '.png');
+      this.iconId++;
+    }, 1000 );
   }
 }
 

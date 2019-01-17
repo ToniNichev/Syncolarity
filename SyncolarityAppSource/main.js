@@ -29,4 +29,9 @@ ipcMain.on('request-showing-of-settting-window', function() {
   settingsWindow.window.show();
 });
 
+ipcMain.on('sync-started', function() {
+  trayIcon.animate();  
+});
+
+
 
