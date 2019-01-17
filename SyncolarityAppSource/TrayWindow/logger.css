@@ -8,6 +8,14 @@
     display:block;
 }
 
+#log error {
+  color: red;
+  display:block;
+  border-bottom: 1px solid red;
+  padding-bottom: 5px;
+}
+
+
 #log header {
   border-top: 1px solid blue;
   border-bottom: 1px solid blue;

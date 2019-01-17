@@ -69,6 +69,9 @@ ipc.on('update-config', (event, config) => {
     var co = 0;
     appSettings.config.syncConfigs.map((config, id) => {  
 
+      // statusbar
+      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.status-pannel').innerHTML = rsyncFactory.getLastSyncStatus([co]);
+
       // attach panel events.
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
       document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);

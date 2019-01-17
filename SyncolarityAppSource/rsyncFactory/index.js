@@ -49,15 +49,19 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   if(excludeList[0])
     rsync.exclude(excludeList);
 
-  const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-upload"></i>';
+  const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
   const _date = new Date().toString();
-  const _msg = "<header>" + m + " " +  title + " : " + _date + "</header>";
-  addToLogWindow(id, _msg, onComplete);
-  lastSyncStatus[id] = _msg;
-  document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");  
-  
+  lastSyncStatus[id] = "<statusOK>" + m + _date + "</statusOK>";
+  addToLogWindow(id, "<header>" + m + " " +  title + " : " + _date + "</header>", onComplete);
+  document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");    
   
   rsync.execute(function(error, code, cmd, onComplete) {
+    if(error) {
+      const m = '<i class="fas fa-exclamation-circle"></i>';
+      lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
+      document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
+      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error>", onComplete);
+    }
   }, function(stdOutChunk){
     body += stdOutChunk;
     addToLogWindow(id, stdOutChunk.toString(), onComplete);
@@ -71,10 +75,8 @@ function addToLogWindow(id, msg, onComplete) {
   if(msg.includes('<br>total size is')) {    
     msg = '<footer>' + msg + '</footer><br><br>';
 
-    debugger;
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
     
-
     document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
     // remove startedSyncIds
     startedSyncIds = startedSyncIds.filter(function(value, index, arr){
@@ -120,10 +122,15 @@ function _getStartedSyncIds() {
   return startedSyncIds;
 }
 
+function _getLastSyncStatus(id) {
+  return lastSyncStatus[id] || "";
+}
+
 module.exports =  {
   loadConfig: loadConfig,
   rsyncRequest: rsyncRequest,
   rsyncAll: rsyncAll,
   rsyncConfigId: rsyncConfigId,
-  getStartedSyncIds: _getStartedSyncIds
+  getStartedSyncIds: _getStartedSyncIds,
+  getLastSyncStatus: _getLastSyncStatus
 }

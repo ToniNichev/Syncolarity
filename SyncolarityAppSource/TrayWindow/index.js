@@ -8,7 +8,7 @@ class TrayWindow {
     this.window = new BrowserWindow({
       show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
       height: 810,
-      width: 1025,
+      width: 1925,
       frame: false,  
       backgroundColor: '#E4ECEF',
       resizable: false

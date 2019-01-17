@@ -70,9 +70,7 @@
   width: 50%;
 }
 
-.settings label {
-  padding-right: 10px;
-}
+
 
 input {
   width: 100%;
@@ -88,6 +86,7 @@ input {
 .label {
   display: inline-flex;
   font-weight: 400;
+  padding-right: 10px;
 }
 
 #controls {
@@ -120,4 +119,12 @@ input {
 }
 
 
+/* Status */
 
+statusOK {
+  color: green;
+}
+
+statusError {
+  color: red;
+}
