@@ -60,7 +60,6 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   
   rsync.execute(function(error, code, cmd, onComplete) {
     if(error) {
-      debugger;
       const m = '<i class="fas fa-exclamation-circle"></i>';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];

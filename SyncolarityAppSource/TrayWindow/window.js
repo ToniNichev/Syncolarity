@@ -87,7 +87,7 @@ ipc.on('update-config', (event, config) => {
     // set up time based sync for each config.
     setTimeout(() => {
       _config.forEach((element, id) => {      
-        if(id == 0 && !rsyncFactory.getStartedSyncIds().includes(id) )
+        if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) )
           startSync(id);
       });
     }, 3000);

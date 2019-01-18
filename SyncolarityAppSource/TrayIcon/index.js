@@ -10,6 +10,7 @@ class TrayIcon {
 
 
   animate() {
+    clearInterval(this.tryIconInterval);
     this.tryIconInterval = setInterval( () => {   
       this.createNewTryIcon();   
     }, 1000 );
