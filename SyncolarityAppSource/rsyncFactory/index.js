@@ -3,7 +3,7 @@ let appSettings = null;
 var startedSyncIds = [];
 var disableLogScroll = false;
 var lastSyncStatus = [];
-
+var onCompleteFuncs = [];
 
 function loadConfig() {
   appSettings = new AppSettings(function() {
@@ -20,6 +20,7 @@ function rsyncAll() {
 }
 
 function rsyncConfigId(id, mode, onComplete) {
+  onCompleteFuncs[id] = onComplete;
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
@@ -30,12 +31,12 @@ function rsyncConfigId(id, mode, onComplete) {
   startedSyncIds.push(id);
   var config = _config[id];
   if(mode == 'push')
-    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);
+    this.rsyncRequest(id, config.title, config.syncFolder, config.serverUrl, prepareExcludeList(config.exclusions), mode, config.opt);
   else
-    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt, onComplete);  
+    this.rsyncRequest(id, config.title, config.serverUrl, config.syncFolder, prepareExcludeList(config.exclusions), mode, config.opt);  
 }
 
-function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
+function rsyncRequest(id, title, from, to, excludeList, mode, opt) {
   var rsync = new Rsync()
     .shell('ssh')
     .flags('av')
@@ -55,7 +56,7 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   const m = mode == 'push' ? '<i class="fas fa-upload"></i>' : '<i class="fas fa-download"></i>';
   const _date = new Date().toString();
   lastSyncStatus[id] = "<statusOK>" + m + _date + "</statusOK>";
-  addToLogWindow(id, "<header>" + m + " " +  title + " : " + _date + "</header>", onComplete);
+  addToLogWindow(id, "<header>" + m + " " +  title + " : " + _date + "</header>", onCompleteFuncs[id]);
   document.querySelector(".controlPannel[key='" + id + "']").classList.add("pulse");    
   
   rsync.execute(function(error, code, cmd, onComplete) {
@@ -63,11 +64,11 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
       const m = '<i class="fas fa-exclamation-circle"></i>';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onComplete);
+      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onCompleteFuncs[id]);
     }
   }, function(stdOutChunk){
     body += stdOutChunk;
-    addToLogWindow(id, stdOutChunk.toString(), onComplete);
+    addToLogWindow(id, stdOutChunk.toString(), onCompleteFuncs[id]);
   });
 }
 
