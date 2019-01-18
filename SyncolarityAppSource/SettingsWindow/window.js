@@ -10,13 +10,15 @@ function configLoaded() {
   document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
   var co = 0;
   appSettings.config.syncConfigs.map((config) => {
+    document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings.header button').setAttribute('key', co);
     document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
 
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #sync-folder').value = config.syncFolder;    
     addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.locationHolder #select-sync-folder'));  
+
     // remove sync pannel button
     document.querySelectorAll('#settingsList > .settingsPannel')[co].querySelector('.settings > button').addEventListener('click', function(e) { 
-      var child = e.target.parentElement.parentElement.parentElement.parentElement;
+      var child = e.target.parentElement.parentElement;
       document.querySelector('#settingsList').removeChild( child );  
     }); 
     
@@ -69,6 +71,11 @@ function addNewSettingsPanel() {
   element.setAttribute('key', last);
   document.querySelector("#settingsList").appendChild(element);
   addOpenFolderLocation(document.querySelectorAll('#settingsList .settingsPannel')[last].querySelector('.locationHolder #select-sync-folder'));
+  // remove sync pannel button
+  document.querySelectorAll('#settingsList > .settingsPannel')[last].querySelector('.settings > button').addEventListener('click', function(e) { 
+    var child = e.target.parentElement.parentElement;
+    document.querySelector('#settingsList').removeChild( child );  
+  }); 
 }
 
 /**
@@ -93,23 +100,9 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;
     config.opt.progress = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-progress').checked;
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
-
-
     appSettings.config.syncConfigs.push(config);
   }  
   appSettings.saveSettings(appSettings.config);
-});
-
-
-
-ipc.on('update-config', (event, AppSettings) => {
-  /*
-  debugger;
-  //appSettings = AppSettings;
-  document.getElementById("sync-folder").value = appSettings.config.syncFolder;
-  document.getElementById("remote-server").value = appSettings.config.syncFolder;
-  document.getElementById("exclusion-list").value = appSettings.config.exclusinList;
-  */
 });
 
 
