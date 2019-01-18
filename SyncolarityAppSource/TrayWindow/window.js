@@ -9,7 +9,8 @@ let _config = null;
 let mode = null;
 let notif = null;
 let interval = [];
-
+let syncTime = [];
+var test = 0;
 
 function sendNotification(title, message, mainProcessNotificationType) {
 
@@ -43,29 +44,54 @@ function prepareExcludeList(rawList) {
   return list;
 }
 
-// Create control panels
-ipc.on('update-config', (event, config) => {
+function startSync(id) {
 
+  function pullRequest(id) {
+    console.log("pullRequest");
+    rsyncFactory.rsyncConfigId(id, 'pull', function() {
+      // sync complete
+      const sec = (new Date() - syncTime[id]) / 1000;
+      if( sec >= + _config[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+        console.log("eligable for re-sync");
+        // eligable for re-sync
+        startSync(id);
+      }
+      else {
+        const remindingTime = Math.round( + _config[id].interval - sec);
+        console.log("check again in " + remindingTime + " sec.");
+        setTimeout( () => {
+          // check again in `remindingTime` seconds.
+          startSync(id);
+        }, remindingTime * 1000);
+      }
+    });
+  }
+
+  console.log("startSync");
+  syncTime[id] = new Date();
+  // do the pull request, wast 1/2 sec and request pull sync
+  rsyncFactory.rsyncConfigId(id, 'push', function() {    
+    setTimeout( () => { pullRequest(id); }, 500);
+  });
+}
+
+// When config updates, or loads do these:
+ipc.on('update-config', (event, config) => {
 
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
     _config = appSettings.config.syncConfigs;
-
+    // draw sync panels
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
 
-    // time based sync happens here
-    _config.forEach((element, id) => {      
-      clearInterval(interval[id]);
-      let cfg = _config[id];
-      if(cfg.autosync) {
-        interval[id] = setInterval(() => {
-          rsyncFactory.rsyncConfigId(id, 'push', function() {
-            rsyncFactory.rsyncConfigId(id, 'pull', null);
-          });
-        }, cfg.interval * 1000);
-      }
-    });
-    
+    // set up time based sync for each config.
+    setTimeout(() => {
+      _config.forEach((element, id) => {      
+        if(id == 0 && !rsyncFactory.getStartedSyncIds().includes(id) )
+          startSync(id);
+      });
+    }, 3000);
+
     var co = 0;
     appSettings.config.syncConfigs.map((config, id) => {  
 
@@ -77,12 +103,12 @@ ipc.on('update-config', (event, config) => {
       document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
       // push button
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
-        var id = e.srcElement.parentElement.parentElement.getAttribute('key');
+        var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
         rsyncFactory.rsyncConfigId(id, 'push');
       });
       // pull button
       document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-pull').addEventListener('click', function(e) {         
-        var id = e.srcElement.parentElement.parentElement.getAttribute('key');
+        var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
         rsyncFactory.rsyncConfigId(id, 'pull');
       });
 

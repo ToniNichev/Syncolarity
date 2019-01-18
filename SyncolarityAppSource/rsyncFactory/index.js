@@ -4,8 +4,8 @@ var startedSyncIds = [];
 var disableLogScroll = false;
 var lastSyncStatus = [];
 
+
 function loadConfig() {
-  //debugger;
   appSettings = new AppSettings(function() {
     _config = appSettings.config.syncConfigs;
   });  
@@ -20,11 +20,13 @@ function rsyncAll() {
 }
 
 function rsyncConfigId(id, mode, onComplete) {
-  window.ipcRenderer.send('sync-started');
   if(startedSyncIds.includes(id)) {
     addToLogWindow(id, "<important>Synk in progress, skipping!</important><br/>", onComplete);
     return;
   }
+
+  window.ipcRenderer.send('sync-started');
+
   startedSyncIds.push(id);
   var config = _config[id];
   if(mode == 'push')
@@ -58,10 +60,11 @@ function rsyncRequest(id, title, from, to, excludeList, mode, opt, onComplete) {
   
   rsync.execute(function(error, code, cmd, onComplete) {
     if(error) {
+      debugger;
       const m = '<i class="fas fa-exclamation-circle"></i>';
       lastSyncStatus[id] = "<statusError>" + m + " " + _date + "</statusError>";
       document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
-      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error>", onComplete);
+      addToLogWindow(id, "<error>" + m + " " +  error.message + " : " + _date + "</error><br>total size is 0.", onComplete);
     }
   }, function(stdOutChunk){
     body += stdOutChunk;
@@ -74,6 +77,8 @@ function addToLogWindow(id, msg, onComplete) {
 
   // if sync completed, execute the code below.
   if(msg.includes('<br>total size is')) {    
+    // remove startedSyncIds
+    removeStartedSyncId(id);      
     // disable tray icon animation
     window.ipcRenderer.send('sync-stopped');
     // tray notification
@@ -85,16 +90,18 @@ function addToLogWindow(id, msg, onComplete) {
     document.querySelector('[key="' + id + '"] .status-pannel').innerHTML = lastSyncStatus[id];
     // remove pannel pulse
     document.querySelector(".controlPannel[key='" + id + "']").classList.remove("pulse"); 
-    // remove startedSyncIds
-    startedSyncIds = startedSyncIds.filter(function(value, index, arr){
-      return value != id;  
-    });   
+  } 
 
-  }  
   let log = document.getElementById("log").innerHTML;  
   document.getElementById("log").innerHTML = log + msg;  
   if(!disableLogScroll)
     document.querySelector('#log').scrollTo(0,document.querySelector('#log').scrollHeight);  
+}
+
+function removeStartedSyncId(id) {
+  startedSyncIds = startedSyncIds.filter(function(value, index, arr){
+    return value != id;  
+  });  
 }
 
 document.querySelector('#log').addEventListener('mouseenter', function (e) {
