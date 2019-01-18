@@ -33,5 +33,7 @@ ipcMain.on('sync-started', function() {
   trayIcon.animate();  
 });
 
-
+ipcMain.on('sync-stopped', function() {
+  trayIcon.stopAnimation();  
+});
 

@@ -74,7 +74,8 @@ function addToLogWindow(id, msg, onComplete) {
 
   // if sync completed, execute the code below.
   if(msg.includes('<br>total size is')) {    
-  
+    // disable tray icon animation
+    window.ipcRenderer.send('sync-stopped');
     // tray notification
     var trayMsg = msg.split('total size');
     trayMsg = trayMsg[0].replace(/<br>/g, '');
