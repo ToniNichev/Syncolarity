@@ -19,7 +19,7 @@ class TrayWindow {
     this.window.webContents.openDevTools();
 
     this.window.on('show', () => {
-      this.window.webContents.send('update-config', appSettings.config);
+      //this.window.webContents.send('update-config', appSettings.config);
     });      
 
     this.window.on('blur', () => {

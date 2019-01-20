@@ -10,7 +10,7 @@ let mode = null;
 let notif = null;
 let interval = [];
 let syncTime = [];
-var test = 0;
+let syncTimeoutIds = [];
 
 function sendNotification(title, message, mainProcessNotificationType) {
 
@@ -44,10 +44,13 @@ function prepareExcludeList(rawList) {
   return list;
 }
 
+/**
+ * Starty time based sync process
+ * @param {*} id the id of the sync config
+ */
 function startSync(id) {
-
   function pullRequest(id) {
-    console.log("pullRequest");
+
     rsyncFactory.rsyncConfigId(id, 'pull', function() {
       // sync complete
       const sec = (new Date() - syncTime[id]) / 1000;
@@ -67,9 +70,8 @@ function startSync(id) {
     });
   }
 
-  console.log("startSync");
   syncTime[id] = new Date();
-  // do the pull request, wast 1/2 sec and request pull sync
+  // do the pull request, wait 1/2 sec and request pull sync
   rsyncFactory.rsyncConfigId(id, 'push', function() {    
     setTimeout( () => { pullRequest(id); }, 500);
   });
@@ -85,12 +87,16 @@ ipc.on('update-config', (event, config) => {
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
 
     // set up time based sync for each config.
+
+
     setTimeout(() => {
       _config.forEach((element, id) => {      
-        if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) )
+        if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
           startSync(id);
+        }
       });
-    }, 3000);
+    }, 1000);
+
 
     var co = 0;
     appSettings.config.syncConfigs.map((config, id) => {  
