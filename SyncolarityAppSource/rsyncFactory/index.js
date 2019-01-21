@@ -27,6 +27,7 @@ function rsyncConfigId(id, mode, onComplete) {
   }
 
   window.ipcRenderer.send('sync-started');
+console.log("##################################");
 
   startedSyncIds.push(id);
   var config = _config[id];
@@ -80,7 +81,8 @@ function addToLogWindow(id, msg, onComplete) {
     // remove startedSyncIds
     removeStartedSyncId(id);      
     // disable tray icon animation
-    window.ipcRenderer.send('sync-stopped');
+    if(startedSyncIds.length == 0)
+      window.ipcRenderer.send('sync-stopped');
     // tray notification
     var trayMsg = msg.split('total size');
     trayMsg = trayMsg[0].replace(/<br>/g, '');

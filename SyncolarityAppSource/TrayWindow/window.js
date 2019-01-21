@@ -62,7 +62,7 @@ function startSync(id) {
       else {
         const remindingTime = Math.round( + _config[id].interval - sec);
         console.log("check again in " + remindingTime + " sec.");
-        setTimeout( () => {
+        syncTimeoutIds[id] = setTimeout( () => {
           // check again in `remindingTime` seconds.
           startSync(id);
         }, remindingTime * 1000);
@@ -78,7 +78,7 @@ function startSync(id) {
 }
 
 // When config updates, or loads do these:
-ipc.on('update-config', (event, config) => {
+function startTimeBasedSync() {
 
  let appSettings = new AppSettings(function() {
     rsyncFactory.loadConfig();
@@ -87,7 +87,6 @@ ipc.on('update-config', (event, config) => {
     document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
 
     // set up time based sync for each config.
-
 
     setTimeout(() => {
       _config.forEach((element, id) => {      
@@ -125,7 +124,9 @@ ipc.on('update-config', (event, config) => {
       co ++;
     });
   });  
-})
+}
+
+startTimeBasedSync();
 
 function returnPanels(numberPanels) {
   let html = '';
