@@ -103,6 +103,7 @@ document.getElementById("save").addEventListener("click", function (e) {
     appSettings.config.syncConfigs.push(config);
   }  
   appSettings.saveSettings(appSettings.config);
+  appSettings.settingsChanged();
 });
 
 

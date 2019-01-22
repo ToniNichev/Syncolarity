@@ -45,7 +45,7 @@ function prepareExcludeList(rawList) {
 }
 
 /**
- * Starty time based sync process
+ * Start time based sync process
  * @param {*} id the id of the sync config
  */
 function startSync(id) {
@@ -123,10 +123,16 @@ function startTimeBasedSync() {
       }      
       co ++;
     });
+
+
+    appSettings.subscribeForOnSettingsChanbged(function() {
+      alert("!");
+    });
   });  
 }
 
 startTimeBasedSync();
+
 
 function returnPanels(numberPanels) {
   let html = '';
