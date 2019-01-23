@@ -123,11 +123,6 @@ function startTimeBasedSync() {
       }      
       co ++;
     });
-
-
-    appSettings.subscribeForOnSettingsChanbged(function() {
-      alert("!");
-    });
   });  
 }
 

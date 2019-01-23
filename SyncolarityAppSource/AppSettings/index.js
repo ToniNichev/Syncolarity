@@ -1,5 +1,4 @@
 const fs = require('fs');
-const onSettingsChanged = [];
 class AppSettings {
 
   constructor(callback) {
@@ -35,20 +34,6 @@ class AppSettings {
     });     
   }
 
-  subscribeForOnSettingsChanbged(func) {
-    debugger;
-    alert("2");
-    onSettingsChanged.push(func);
-  }
-
-  settingsChanged() {
-    debugger;
-    alert("1");
-    onSettingsChanged.map( (func) => {
-      debugger;
-      func();
-    } );
-  }
 }  
 
 module.exports = AppSettings;
