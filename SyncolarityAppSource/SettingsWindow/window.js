@@ -1,15 +1,18 @@
 'use strict'  
 const remote = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
-let AppSettings = require('../AppSettings');
+//let AppSettings = require('../AppSettings');
+
+let _appSettings = null;
 
 /**
  * Fires after the config file is loaded and sets up the pannels with the config data
  */
-function configLoaded() {
-  document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
+function init() {
+  debugger;
+  document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
   var co = 0;
-  appSettings.config.syncConfigs.map((config) => {
+  _appSettings.config.syncConfigs.map((config) => {
     document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings.header button').setAttribute('key', co);
     document.querySelectorAll('#settingsList .settingsPannel')[co].setAttribute('key', co);
 
@@ -83,7 +86,7 @@ function addNewSettingsPanel() {
  */
 document.getElementById("save").addEventListener("click", function (e) {
   var co = 0;
-  appSettings.config.syncConfigs = [];
+  _appSettings.config.syncConfigs = [];
   var len = document.querySelectorAll('#settingsList .settingsPannel').length;
   for(var co = 0; co < len ;co ++) {
     var config = {};
@@ -100,9 +103,9 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;
     config.opt.progress = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-progress').checked;
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
-    appSettings.config.syncConfigs.push(config);
+    _appSettings.config.syncConfigs.push(config);
   }  
-  appSettings.saveSettings(appSettings.config);
+  _appSettings.saveSettings(_appSettings.config);
 });
 
 
@@ -115,4 +118,19 @@ function returnPanels(numberPanels) {
 }
 
 
-let appSettings = new AppSettings(configLoaded);
+/**
+ * Messages from the background process.
+ */
+
+ipc.on('ready-to-show', (event, payload) => {
+  _appSettings = payload;
+  setTimeout( () => {
+    debugger;
+    init();
+  }, 4000);
+});
+
+ipc.on('show', (event, payload) => {
+  alert("!");
+  console.log(payload);
+});

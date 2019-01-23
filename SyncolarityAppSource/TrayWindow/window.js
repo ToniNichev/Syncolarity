@@ -1,6 +1,6 @@
 const Rsync = require('rsync');
 const ipc = require('electron').ipcRenderer;
-const AppSettings = require('../AppSettings');
+//const AppSettings = require('../AppSettings');
 const rsyncFactory = require('../rsyncFactory');
 
 
@@ -11,6 +11,7 @@ let notif = null;
 let interval = [];
 let syncTime = [];
 let syncTimeoutIds = [];
+let _appSettings = null;
 
 function sendNotification(title, message, mainProcessNotificationType) {
 
@@ -80,53 +81,50 @@ function startSync(id) {
 // When config updates, or loads do these:
 function startTimeBasedSync() {
 
- let appSettings = new AppSettings(function() {
-    rsyncFactory.loadConfig();
-    _config = appSettings.config.syncConfigs;
-    // draw sync panels
-    document.querySelector('#settingsList').innerHTML = returnPanels(appSettings.config.syncConfigs.length);
+  rsyncFactory.loadConfig();
+  let _config = _appSettings.config.syncConfigs;
+  // draw sync panels
+  document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
 
-    // set up time based sync for each config.
+  // set up time based sync for each config.
 
-    setTimeout(() => {
-      _config.forEach((element, id) => {      
-        if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
-          startSync(id);
-        }
-      });
-    }, 1000);
-
-
-    var co = 0;
-    appSettings.config.syncConfigs.map((config, id) => {  
-
-      // statusbar
-      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.status-pannel').innerHTML = rsyncFactory.getLastSyncStatus([co]);
-
-      // attach panel events.
-      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
-      document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
-      // push button
-      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
-        var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
-        rsyncFactory.rsyncConfigId(id, 'push');
-      });
-      // pull button
-      document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-pull').addEventListener('click', function(e) {         
-        var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
-        rsyncFactory.rsyncConfigId(id, 'pull');
-      });
-
-      // pulse active syncs 
-      if(rsyncFactory.getStartedSyncIds().includes(''+ id)) {
-        document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
-      }      
-      co ++;
+  setTimeout(() => {
+    _config.forEach((element, id) => {      
+      if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+        startSync(id);
+      }
     });
-  });  
-}
+  }, 1000);
 
-startTimeBasedSync();
+
+  var co = 0;
+  _appSettings.config.syncConfigs.map((config, id) => {  
+
+    // statusbar
+    document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.status-pannel').innerHTML = rsyncFactory.getLastSyncStatus([co]);
+
+    // attach panel events.
+    document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.label').innerText = config.title;
+    document.querySelectorAll('#settingsList > .controlPannel')[co].setAttribute('key', co);
+    // push button
+    document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-push').addEventListener('click', function(e) {         
+      var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
+      rsyncFactory.rsyncConfigId(id, 'push');
+    });
+    // pull button
+    document.querySelectorAll('#settingsList > .controlPannel')[co].querySelector('.buttonsHolder > .button-pull').addEventListener('click', function(e) {         
+      var id = + e.srcElement.parentElement.parentElement.getAttribute('key');
+      rsyncFactory.rsyncConfigId(id, 'pull');
+    });
+
+    // pulse active syncs 
+    if(rsyncFactory.getStartedSyncIds().includes(''+ id)) {
+      document.querySelector(".controlPannel[key='0']").classList.add("pulse");  
+    }      
+    co ++;
+  });
+ 
+}
 
 
 function returnPanels(numberPanels) {
@@ -150,7 +148,23 @@ document.getElementById("expand-log").addEventListener("click", function (e) {
 });
 
 
-
 document.getElementById("setup").addEventListener("click", function (e) {
   window.ipcRenderer.send('request-showing-of-settting-window');
+});
+
+/**
+ * Messages from the background process.
+ */
+
+ipc.on('ready-to-show', (event, payload) => {
+  _appSettings = payload;
+
+  setTimeout( () => {
+    startTimeBasedSync();
+  }, 4000);
+});
+
+ipc.on('show', (event, payload) => {
+  alert("!");
+  console.log(payload);
 });

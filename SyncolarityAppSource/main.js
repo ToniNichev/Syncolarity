@@ -10,10 +10,12 @@ let appSettings = null;
 let settingsWindow = null;
   
 app.on('ready', function() {
-  appSettings = new AppSettings();  
-  trayWindow = new TrayWindow(appSettings);
-  trayIcon = new TrayIcon(trayWindow.window);
-  settingsWindow = new SettingsWindow(appSettings);
+  appSettings = new AppSettings(() => {  
+    appSettings.test.push("one");
+    trayWindow = new TrayWindow(appSettings);
+    trayIcon = new TrayIcon(trayWindow.window);
+    settingsWindow = new SettingsWindow(appSettings);
+  });
 });
 
 app.on('quit-app', function() {

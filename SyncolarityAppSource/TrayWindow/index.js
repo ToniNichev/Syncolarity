@@ -1,5 +1,6 @@
 const {app, BrowserWindow} = require('electron');
 
+
 class TrayWindow {
 
   constructor(appSettings) {
@@ -18,17 +19,22 @@ class TrayWindow {
     this.window.loadFile('./TrayWindow/index.html');
     this.window.webContents.openDevTools();
 
+    /*
     this.window.on('show', () => {
-      //this.window.webContents.send('update-config', appSettings.config);
+      //this.window.webContents.send('update-config', appSettings);
+      setTimeout( () => {
+      this.window.webContents.send('show', appSettings);      
+    }, 1000)
     });      
+    */
 
     this.window.on('blur', () => {
       this.window.hide();
     });    
 
     this.window.on('ready-to-show', () => {
-      // force the initial config to be executed
-      this.window.webContents.send('update-config', appSettings.config);
+      // pass the app settings to the renderer process
+      this.window.webContents.send('ready-to-show', appSettings);
     });
   }
 }

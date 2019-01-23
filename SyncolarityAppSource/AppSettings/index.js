@@ -2,6 +2,8 @@ const fs = require('fs');
 class AppSettings {
 
   constructor(callback) {
+    this.test = [];
+
     this.filepath = './settings/app-settings.json';    
     this.callback = callback;
     this.loadSettings();
@@ -27,6 +29,7 @@ class AppSettings {
     let filepath = this.filepath;
     let cfg = JSON.stringify(this.config);
     fs.writeFile(filepath, cfg,  function (err) {
+      alert("SAVED");
       if(err){
           alert("An error ocurred reading the file :" + err.message);
           return;
