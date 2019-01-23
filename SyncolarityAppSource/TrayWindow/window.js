@@ -150,7 +150,7 @@ document.getElementById("setup").addEventListener("click", function (e) {
 });
 
 /**
- * Messages from the background process.
+ * Messages with the background process.
  */
 
 ipc.on('ready-to-show', (event, payload) => {
@@ -163,4 +163,18 @@ ipc.on('ready-to-show', (event, payload) => {
 ipc.on('show', (event, payload) => {
   alert("!");
   console.log(payload);
+});
+
+ipc.send('update-notify-value', 123);
+
+
+ipc.on('save-config-notify', (event, payload) => {
+  setTimeout(() => { 
+
+    syncTimeoutIds.map( (timeoutId) => {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    });
+    syncTimeoutIds = [];
+  }, 2000);
 });

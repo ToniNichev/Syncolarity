@@ -25,12 +25,8 @@ class AppSettings {
     });    
   }
 
-  testFunc() {
-    return "123456";
-  }
-
-  saveSettings(newConfig) {
-    this.config = newConfig;
+  saveSettings(appSettingsConfig) {    
+    this.config.syncConfigs = appSettingsConfig;
     let filepath = this.filepath;
     let cfg = JSON.stringify(this.config);
     fs.writeFile(filepath, cfg,  function (err) {

@@ -7,7 +7,7 @@ class SettingsWindow {
     this.window = new BrowserWindow({
           show: false, // Initially, we should hide it, in such way we will remove blink-effect. 
           height: 910,
-          width: 1025,
+          width: 1925,
           frame: false,  // This option will remove frame buttons. By default window has standart chrome header buttons (close, hide, minimize). We should change this option because we want to display our window like Tray Window not like common chrome-like window.
           backgroundColor: '#E4ECEF',
           resizable: false
@@ -28,7 +28,14 @@ class SettingsWindow {
     this.window.on('ready-to-show', () => {
       // pass the app settings to the renderer process
       this.window.webContents.send('ready-to-show', appSettings);
-    });    
+    });
+    
+    // Messages from renderer 
+
+    // save window clicked
+    ipcMain.on('save-config-notify', function (event, appSettingsConfig) {
+      appSettings.saveSettings(appSettingsConfig);
+    })    
   }
 
 }

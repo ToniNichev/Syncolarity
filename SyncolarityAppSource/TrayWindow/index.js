@@ -36,6 +36,17 @@ class TrayWindow {
       // pass the app settings to the renderer process
       this.window.webContents.send('ready-to-show', appSettings);
     });
+
+    ipcMain.on('update-notify-value', (event, arg) => {
+      console.log("ipcMain!", arg);
+    });
+
+    // save window clicked
+    ipcMain.on('save-config-notify', (event, appSettingsConfig) => {
+      console.log(":::::::::::: save-config-notify");
+      this.window.webContents.send('save-config-notify', appSettings);
+    })      
+
   }
 }
 

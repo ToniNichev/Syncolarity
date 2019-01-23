@@ -86,7 +86,7 @@ function addNewSettingsPanel() {
  */
 document.getElementById("save").addEventListener("click", function (e) {
   var co = 0;
-  _appSettings.config.syncConfigs = [];
+  var appSettingsConfig = [];
   var len = document.querySelectorAll('#settingsList .settingsPannel').length;
   for(var co = 0; co < len ;co ++) {
     var config = {};
@@ -103,10 +103,9 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.z = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-z').checked;
     config.opt.progress = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-progress').checked;
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
-    _appSettings.config.syncConfigs.push(config);
+    appSettingsConfig.push(config);
   }  
-  debugger;
-  _appSettings.saveSettings(_appSettings.config);
+  ipc.send('save-config-notify', appSettingsConfig);
 });
 
 
@@ -127,7 +126,7 @@ ipc.on('ready-to-show', (event, payload) => {
   _appSettings = payload;
   setTimeout( () => {
     init();
-  }, 4000);
+  }, 2000);
 });
 
 ipc.on('show', (event, payload) => {
