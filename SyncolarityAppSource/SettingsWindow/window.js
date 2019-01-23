@@ -105,6 +105,7 @@ document.getElementById("save").addEventListener("click", function (e) {
     config.opt.delete = document.querySelectorAll('#settingsList .settingsPannel')[co].querySelector('.settings > #opt-delete').checked;
     _appSettings.config.syncConfigs.push(config);
   }  
+  debugger;
   _appSettings.saveSettings(_appSettings.config);
 });
 
@@ -125,7 +126,6 @@ function returnPanels(numberPanels) {
 ipc.on('ready-to-show', (event, payload) => {
   _appSettings = payload;
   setTimeout( () => {
-    debugger;
     init();
   }, 4000);
 });

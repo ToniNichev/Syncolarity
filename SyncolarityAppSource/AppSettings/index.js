@@ -7,6 +7,7 @@ class AppSettings {
     this.filepath = './settings/app-settings.json';    
     this.callback = callback;
     this.loadSettings();
+
   } 
   
   loadSettings() {
@@ -24,14 +25,18 @@ class AppSettings {
     });    
   }
 
+  testFunc() {
+    return "123456";
+  }
+
   saveSettings(newConfig) {
     this.config = newConfig;
     let filepath = this.filepath;
     let cfg = JSON.stringify(this.config);
     fs.writeFile(filepath, cfg,  function (err) {
-      alert("SAVED");
+      console.log("SAVED");
       if(err){
-          alert("An error ocurred reading the file :" + err.message);
+          console.log("An error ocurred reading the file :" + err.message);
           return;
       }    
     });     

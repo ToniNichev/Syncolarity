@@ -5,13 +5,12 @@ const rsyncFactory = require('../rsyncFactory');
 
 
 let body='';
-let _config = null;
+let _appSettings = null;
 let mode = null;
 let notif = null;
 let interval = [];
 let syncTime = [];
 let syncTimeoutIds = [];
-let _appSettings = null;
 
 function sendNotification(title, message, mainProcessNotificationType) {
 
@@ -30,7 +29,7 @@ function sendNotification(title, message, mainProcessNotificationType) {
 
 document.getElementById("btn-pull").addEventListener("click", function (e) {
   mode = 'PULL';
-  rsyncFactory.rsyncRequest(_config.serverUrl, _config.syncFolder, prepareExcludeList(_config.exclusions));
+  rsyncFactory.rsyncRequest(_appSettings.serverUrl, _appSettings.syncFolder, prepareExcludeList(_appSettings.exclusions));
 });
 
 document.getElementById("btn-push").addEventListener("click", function (e) {
@@ -50,18 +49,18 @@ function prepareExcludeList(rawList) {
  * @param {*} id the id of the sync config
  */
 function startSync(id) {
+  
   function pullRequest(id) {
-
     rsyncFactory.rsyncConfigId(id, 'pull', function() {
       // sync complete
       const sec = (new Date() - syncTime[id]) / 1000;
-      if( sec >= + _config[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+      if( sec >= + _appSettings.config.syncConfigs[id].interval && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         console.log("eligable for re-sync");
         // eligable for re-sync
         startSync(id);
       }
       else {
-        const remindingTime = Math.round( + _config[id].interval - sec);
+        const remindingTime = Math.round( + _appSettings.config.syncConfigs[id].interval - sec);
         console.log("check again in " + remindingTime + " sec.");
         syncTimeoutIds[id] = setTimeout( () => {
           // check again in `remindingTime` seconds.
@@ -82,15 +81,13 @@ function startSync(id) {
 function startTimeBasedSync() {
 
   rsyncFactory.loadConfig();
-  let _config = _appSettings.config.syncConfigs;
   // draw sync panels
   document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
 
   // set up time based sync for each config.
-
   setTimeout(() => {
-    _config.forEach((element, id) => {      
-      if(_config[id].autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
+    _appSettings.config.syncConfigs.forEach((element, id) => {     
+      if(element.autosync && !rsyncFactory.getStartedSyncIds().includes(id) ) {
         startSync(id);
       }
     });
@@ -158,7 +155,6 @@ document.getElementById("setup").addEventListener("click", function (e) {
 
 ipc.on('ready-to-show', (event, payload) => {
   _appSettings = payload;
-
   setTimeout( () => {
     startTimeBasedSync();
   }, 4000);
