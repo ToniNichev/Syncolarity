@@ -4,13 +4,12 @@ const ipc = require('electron').ipcRenderer;
 const rsyncFactory = require('../rsyncFactory');
 
 
-let body='';
+
 let _appSettings = null;
-let mode = null;
 let notif = null;
-let interval = [];
 let syncTime = [];
 let syncTimeoutIds = [];
+let configChanged = false;
 
 function sendNotification(title, message, mainProcessNotificationType) {
 
@@ -60,6 +59,14 @@ function startSync(id) {
         startSync(id);
       }
       else {
+        if(configChanged) {
+          if(rsyncFactory.getStartedSyncIds().length == 0) {
+            alert("Sync completed!");
+            configChanged = false;
+            //startTimeBasedSync();
+          }
+          return;
+        }
         const remindingTime = Math.round( + _appSettings.config.syncConfigs[id].interval - sec);
         console.log("check again in " + remindingTime + " sec.");
         syncTimeoutIds[id] = setTimeout( () => {
@@ -73,7 +80,9 @@ function startSync(id) {
   syncTime[id] = new Date();
   // do the pull request, wait 1/2 sec and request pull sync
   rsyncFactory.rsyncConfigId(id, 'push', function() {    
-    setTimeout( () => { pullRequest(id); }, 500);
+    setTimeout( () => { 
+      pullRequest(id); 
+    }, 500);
   });
 }
 
@@ -155,9 +164,7 @@ document.getElementById("setup").addEventListener("click", function (e) {
 
 ipc.on('ready-to-show', (event, payload) => {
   _appSettings = payload;
-  setTimeout( () => {
-    startTimeBasedSync();
-  }, 4000);
+  startTimeBasedSync();
 });
 
 ipc.on('show', (event, payload) => {
@@ -169,12 +176,12 @@ ipc.send('update-notify-value', 123);
 
 
 ipc.on('save-config-notify', (event, payload) => {
-  setTimeout(() => { 
-
-    syncTimeoutIds.map( (timeoutId) => {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    });
-    syncTimeoutIds = [];
-  }, 2000);
+  configChanged = true; 
+  syncTimeoutIds.map( (timeoutId, id) => {
+    clearTimeout(syncTimeoutIds[id]);   
+  });
+  syncTimeoutIds = [];
+  if(rsyncFactory.getStartedSyncIds().length == 0) {
+    alert("Sync config changed!!!");
+  }
 });

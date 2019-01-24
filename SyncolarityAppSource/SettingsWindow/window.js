@@ -9,7 +9,6 @@ let _appSettings = null;
  * Fires after the config file is loaded and sets up the pannels with the config data
  */
 function init() {
-  debugger;
   document.querySelector('#settingsList').innerHTML = returnPanels(_appSettings.config.syncConfigs.length);
   var co = 0;
   _appSettings.config.syncConfigs.map((config) => {
